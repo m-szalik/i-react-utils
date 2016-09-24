@@ -63,6 +63,7 @@ export class Input extends React.Component {
     static contextTypes = {
         wizard : React.PropTypes.object
     };
+
     static propTypes = {
         type : React.PropTypes.string.isRequired, // input type
         name : React.PropTypes.string.isRequired, // field name
@@ -111,7 +112,7 @@ export class Input extends React.Component {
         // register field in form
         this.context.wizard.formInputs.push(this);
         //prepare props for input
-        this.inputProps = Object.assign({}, this.props, {onChange:this.handleChange, id:this.inputId, value:this.context.wizard.item[this.props.name]});
+        this.inputProps = Object.assign({}, this.props, {onChange:this.handleChange, id:this.inputId, value:this.context.wizard.data[this.props.name]});
         delete this.inputProps.item; // clear it
         delete this.inputProps.validators; // clear it
         delete this.inputProps.required; // clear it
