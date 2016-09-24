@@ -1,0 +1,53 @@
+{
+  "name": "react-utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "directories" : {
+	"test":"test"
+  },
+
+ "devDependencies": {
+    "assert": "*",
+    "babel": "^6.1.18",
+    "babel-cli": "^6.7.5",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-react-transform": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-react": "*",
+    "babel-preset-stage-0": "*",
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "co": "*",
+    "envify": "*",
+    "es6-promise": "*",
+    "expose-loader": "*",
+    "isparta-loader": "*",
+    "karma": "*",
+    "karma-browserstack-launcher": "*",
+    "karma-chrome-launcher": "*",
+    "karma-coverage": "*",
+    "karma-coveralls": "*",
+    "karma-firefox-launcher": "*",
+    "karma-mocha": "*",
+    "karma-sourcemap-loader": "*",
+    "karma-webpack": "*",
+    "mocha": "*",
+    "mocha-babel": "*",
+    "node-uuid": "*",
+    "regenerator": "*",
+    "regenerator-loader": "*",
+    "transform-loader": "*",
+    "webpack": "*",
+    "webpack-dev-server": "*"
+  },
+  "scripts": {
+    "test": "./node_modules/karma/bin/karma start test/karma.conf.js",
+    "build": "./node_modules/babel-cli/bin/babel.js ./src --plugins add-module-exports --out-dir ./lib;"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/"
+  },
+  "author": "m-szalik",
+  "license": "Apache 2.0"
+}
