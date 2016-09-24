@@ -159,12 +159,8 @@ export class Input extends React.Component {
     }
 
     handleChange(event) {
-        let ep;
-        if (event.target) {
-            const val = event.target.value;
-            this.value(val == undefined ? null : val);
-            ep = event;
-        }
+        const val = event.target.value;
+        this.value(val == undefined ? null : val);
         if (this.orgOnChange) {
             this.orgOnChange(ep);
         }
