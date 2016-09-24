@@ -100,20 +100,16 @@ export class Input extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.validate = this.validate.bind(this);
         this.value = this.value.bind(this);
-        this._data = this._data.bind(this);
         this.orgOnChange = this.props.onChange;
     }
 
-    _data() {
-        return this.context.wizard.data;
-    }
 
     componentWillMount() {
         // register field in form
         this.context.wizard.formInputs.push(this);
         //prepare props for input
         this.inputProps = Object.assign({}, this.props, {onChange:this.handleChange, id:this.inputId, value:this.context.wizard.data[this.props.name]});
-        delete this.inputProps.item; // clear it
+        delete this.inputProps.data; // clear it
         delete this.inputProps.validators; // clear it
         delete this.inputProps.required; // clear it
         delete this.inputProps.options; // clear it
@@ -128,7 +124,7 @@ export class Input extends React.Component {
     }
 
     validate() {
-        let value = getObjProperty(this._data(), this.props.name);
+        let value = getObjProperty(this.context.wizard.data, this.props.name);
         for(let i=0; i<this.validators.length; i++) {
             let validator = this.validators[i];
             let isValid = validator.validatorFunction(value);
@@ -143,7 +139,7 @@ export class Input extends React.Component {
 
     value(newValue) {
         const name = this.props.name;
-        const data = this._data();
+        const data = this.context.wizard.data;
         const old = getObjProperty(data, name);
         if (newValue != undefined) { // set new value
             const nv = newValue == '' ? null : newValue;
@@ -176,7 +172,6 @@ export class Input extends React.Component {
 
     render() {
         const name = this.props.name;
-        const item = this._item();
         let type = this.props.type == undefined ? undefined : this.props.type.toLowerCase();
         return (
                 <div className={` ${this.props.outerClassName}   `}>
@@ -188,7 +183,7 @@ export class Input extends React.Component {
                             }
                         })()}
                         {(() => {
-                            let dv = getObjProperty(item, name);
+                            let dv = this.value();
                             if (dv == null) {
                                 dv = '';
                             }
@@ -278,7 +273,7 @@ export class Form extends React.Component {
 
     handleOnSubmit(event) {
         event.preventDefault();
-        console.debug("Submit (Form)", event, this.item);
+        console.debug("Submit (Form)", event, this.data);
         // validation
         let ret = true;
         this.formInputs.forEach((fin) => {
