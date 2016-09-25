@@ -12,7 +12,11 @@ export function createFormValidator(message, isValidFunction) {
 export function createIsRequiredFormValidator(message) {
     message = message || 'Pole jest wymagane';
     let validator = createFormValidator(message, function(value) {
-        return ! (value == null || value == undefined || value.trim().length == 0);
+        if (typeof value == 'string') {
+            return !(value == null || value == undefined || value.trim().length == 0);
+        } else {
+            return value == undefined ? false : value;
+        }
     });
     validator.setRequired = true;
     return validator;
@@ -100,6 +104,7 @@ export class Input extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.validate = this.validate.bind(this);
         this.value = this.value.bind(this);
+        this._renderSelect = this._renderSelect.bind(this);
         this.orgOnChange = this.props.onChange;
     }
 
@@ -116,7 +121,11 @@ export class Input extends React.Component {
         delete this.inputProps.instantValidation; // clear it
         delete this.inputProps.defaultValue; // clear it
         delete this.inputProps.outerClassName;
-        this.inputProps.className = 'form-control' + (this.props.className ?  ' ' + this.props.className : '') + ' form-wizard-input form-wizard-input-' + this.props.type;
+        if (this.props.type == 'checkbox') {
+            this.inputProps.className = (this.props.className ? ' ' + this.props.className : '') + ' form-wizard-input form-wizard-input-' + this.props.type;
+        } else {
+            this.inputProps.className = 'form-control' + (this.props.className ? ' ' + this.props.className : '') + ' form-wizard-input form-wizard-input-' + this.props.type;
+        }
     }
 
     componentWillUnmount() {
@@ -159,18 +168,40 @@ export class Input extends React.Component {
     }
 
     handleChange(event) {
-        const val = event.target.value;
+        let val = event.target.value;
+        if (event.target.type == 'checkbox') {
+            val = event.target.checked;
+        }
         this.value(val == undefined ? null : val);
         if (this.orgOnChange) {
             this.orgOnChange(ep);
         }
     }
 
+
+    _renderSelect(options) {
+        let opts = [];
+        opts.push((<option key="" value=""></option>));
+        let isa = Array.isArray(options);
+        for (let key in options) {
+            let val = options[key];
+            let rk = isa ? val : key;
+            opts.push((<option label={val} value={rk} key={rk}>{val}</option>));
+        }
+        return (<select {...this.inputProps} value={dv}>{opts}</select>);
+    }
+
+
     render() {
         const name = this.props.name;
         let type = this.props.type == undefined ? undefined : this.props.type.toLowerCase();
-        return (
-                <div className={` ${this.props.outerClassName}   `}>
+        if (type == 'checkbox') {
+            return (<div className={` ${this.props.outerClassName} ${this.state.error != null ? 'has-error' : ''} `}>
+                        <div className="checkbox"><label><input type="checkbox" {...this.inputProps} value={this.value()} />{this.props.label}</label></div>
+                    </div>);
+        } else {
+            return (
+                <div className={` ${this.props.outerClassName} `}>
                     <div className={`form-group ${this.props.className} ${this.state.error != null ? 'has-error' : ''}`}>
                         <label className="form-control-label" htmlFor={this.inputId}>{this.state.label}</label>
                         {(() => {
@@ -184,34 +215,10 @@ export class Input extends React.Component {
                                 dv = '';
                             }
                             if (this.props.options != undefined) { // select
-                                if (type != undefined && type != 'select' && type !='nice-select') {
-                                    throw 'Cannot use options with type "' + type +'"';
+                                if (type != undefined && type != 'select' && type != 'nice-select') {
+                                    throw 'Cannot use options with type "' + type + '"';
                                 }
-                                if (type == 'nice-select') {
-                                    const opts = [{value:'', label:'Wybierz', name:name}];
-                                    const isArr = Array.isArray(this.props.options);
-                                    for(let key in this.props.options) {
-                                        const sval = this.props.options[key];
-                                        opts.push({value:isArr ? sval : key, label:sval, name:name});
-                                    }
-                                    return (<Select
-                                        name={this.props.name}
-                                        value={dv}
-                                        options={opts}
-                                        onChange={this.handleChange}
-                                        required={this.state.required}
-                                    />);
-                                } else {
-                                    let opts = [];
-                                    opts.push((<option key="" value=""></option>));
-                                    let isa = Array.isArray(this.props.options);
-                                    for (let key in this.props.options) {
-                                        let val = this.props.options[key];
-                                        let rk = isa ? val : key;
-                                        opts.push((<option label={val} value={rk} key={rk}>{val}</option>));
-                                    }
-                                    return (<select {...this.inputProps} value={dv}>{opts}</select>);
-                                }
+                                return this._renderSelect(this.props.options);
                             }
                             type = type || 'text';
                             if (type == 'textarea') {
@@ -228,8 +235,9 @@ export class Input extends React.Component {
                             }
                         })()}
                     </div>
-            </div>
-        );
+                </div>
+            );
+        }
     }
 }
 

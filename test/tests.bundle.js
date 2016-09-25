@@ -1,3 +1,3 @@
-var ctx = require.context('.', true, /.+\.test\.jsx?$/);
-require.context('.', true, /.+\.test\.jsx?$/).keys().forEach(ctx);
+var ctx = require.context('.', true, /.+\.test\.js?$/);
+require.context('.', true, /.+\.test\.js?$/).keys().forEach(ctx);
 module.exports = ctx;
