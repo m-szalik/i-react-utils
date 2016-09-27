@@ -25,15 +25,29 @@ export function isValidNIP(nip) {
 }
 
 export function isValidREGON(regon) {
-    var reg = /^[0-9]{9}$/;
-    if(reg.test(regon) == false) {
+    //REGON is a 9 or 14 digit number. Last digit is control digit from equation:
+    // [ sum from 1 to (9 or 14) (x[i]*w[i]) ] mod 11; where x[i] is pointed NIP digit and w[i] is pointed digit
+    //from [8 9 2 3 4 5 6 7] for 9 and [2 4 8 5 0 9 7 3 6 1 2 4 8] for 14 digits.
+    let n = regon.length;
+    let w;
+    let cd = 0; // Control digit (last digit)
+    let isOnlyDigit = /^\d+$/.test(regon);
+    if ( n !==9 && n !== 14 && !isOnlyDigit) {
         return false;
-    } else {
-        var dig = (""+regon).split("");
-        var kontrola = (8*parseInt(dig[0]) + 9*parseInt(dig[1]) + 2*parseInt(dig[2]) + 3*parseInt(dig[3]) + 4*parseInt(dig[4]) + 5*parseInt(dig[5]) + 6*parseInt(dig[6]) + 7*parseInt(dig[7]))%11;
-        if(kontrola == 10) kontrola = 0;
-        return parseInt(dig[8])==kontrola;
     }
+    if ( n === 9) {
+        w = [8, 9, 2, 3, 4, 5, 6, 7];
+    } else {
+        w = [2, 4, 8, 5, 0, 9, 7, 3, 6, 1, 2, 4, 8];
+    }
+    for (var i = 0; i<n-1; i++) {
+        cd += w[i]*parseInt(regon.charAt(i));
+    }
+    cd %= 11;
+    if ( cd === 10 ) {
+        cd = 0;
+    }
+    return !( cd !== parseInt(regon.charAt(n-1)) );
 }
 
 
