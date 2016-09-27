@@ -83,7 +83,9 @@ export class Input extends React.Component {
     static defaultProps = {
         required : false,
         validators : [],
-        className: ""
+        className: "",
+        outerClassName: ""
+
     };
 
     constructor(props) {
@@ -113,8 +115,8 @@ export class Input extends React.Component {
         // register field in form
         this.context.wizard.formInputs.push(this);
         //prepare props for input
-        this.inputProps = Object.assign({}, this.props, {onChange:this.handleChange, id:this.inputId, value:this.context.wizard.data[this.props.name]});
-        delete this.inputProps.data; // clear it
+        this.inputProps = Object.assign({}, this.props, {onChange:this.handleChange, id:this.inputId, value:this.context.wizard.formData[this.props.name]});
+        delete this.inputProps.formData; // clear it
         delete this.inputProps.validators; // clear it
         delete this.inputProps.required; // clear it
         delete this.inputProps.options; // clear it
@@ -133,7 +135,7 @@ export class Input extends React.Component {
     }
 
     validate() {
-        let value = getObjProperty(this.context.wizard.data, this.props.name);
+        let value = getObjProperty(this.context.wizard.formData, this.props.name);
         for(let i=0; i<this.validators.length; i++) {
             let validator = this.validators[i];
             let isValid = validator.validatorFunction(value);
@@ -148,7 +150,7 @@ export class Input extends React.Component {
 
     value(newValue) {
         const name = this.props.name;
-        const data = this.context.wizard.data;
+        const data = this.context.wizard.formData;
         const old = getObjProperty(data, name);
         if (newValue != undefined) { // set new value
             const nv = newValue == '' ? null : newValue;
@@ -171,10 +173,19 @@ export class Input extends React.Component {
         let val = event.target.value;
         if (event.target.type == 'checkbox') {
             val = event.target.checked;
+            if (val == undefined || val == null) {
+                val = false;
+            }
+        }
+        if (val == undefined || val == null) {
+            return val;
+        }
+        if (event.target.type == 'number') {
+            val = parseInt(val);
         }
         this.value(val == undefined ? null : val);
         if (this.orgOnChange) {
-            this.orgOnChange(ep);
+            this.orgOnChange(event);
         }
     }
 
@@ -247,7 +258,7 @@ export class Form extends React.Component {
     };
 
     static propTypes = {
-        data : React.PropTypes.object,   // where to save or get values
+        formData : React.PropTypes.object,   // where to save or get values
         instantValidation : React.PropTypes.bool,   // parameter to pass to Input(s)
         onValidationError : React.PropTypes.func,   // callback func(event, form)
         onSubmit : React.PropTypes.func             // callback func(event, form)
@@ -255,16 +266,21 @@ export class Form extends React.Component {
 
     static defaultProps = {
         instantValidation : false,
-        data : {}
+        formData : {}
     };
 
     constructor(props) {
         super();
         this.props = props;
-        this.data = props.data;
+        this.formData = props.formData;
         this.formInputs = [];
         this.state = { };
         this.handleOnSubmit = this.handleOnSubmit.bind(this);
+        this.data = this.data.bind(this);
+    }
+
+    data() {
+        return this.formData;
     }
 
     getChildContext() {
@@ -277,7 +293,7 @@ export class Form extends React.Component {
 
     handleOnSubmit(event) {
         event.preventDefault();
-        console.debug("Submit (Form)", event, this.data);
+        console.debug("Submit (Form)", event, this.formData);
         // validation
         let ret = true;
         this.formInputs.forEach((fin) => {
