@@ -16,7 +16,7 @@
   },
 "devDependencies": {
     "assert": "*",
-    "babel": "^6.1.18",
+    "babel-cli": "^6.1.18",
     "babel-loader": "^6.2.0",
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-plugin-react-transform": "*",
