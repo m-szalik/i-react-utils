@@ -32,10 +32,10 @@ export function isValidREGON(regon) {
     let w;
     let cd = 0; // Control digit (last digit)
     let isOnlyDigit = /^\d+$/.test(regon);
-    if ( n !==9 && n !== 14 && !isOnlyDigit) {
+    if ( (n !== 9 && n !== 14) || !isOnlyDigit || parseInt(regon) === 0) {
         return false;
     }
-    if ( n === 9) {
+    if (n === 9) {
         w = [8, 9, 2, 3, 4, 5, 6, 7];
     } else {
         w = [2, 4, 8, 5, 0, 9, 7, 3, 6, 1, 2, 4, 8];
@@ -49,6 +49,7 @@ export function isValidREGON(regon) {
     }
     return !( cd !== parseInt(regon.charAt(n-1)) );
 }
+
 
 
 export function isValidEmail(email) {
