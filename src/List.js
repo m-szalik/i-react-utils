@@ -1,13 +1,6 @@
 import React, { PropTypes } from 'react';
 
 
-export class ListHeader extends React.Component {
-    render() {
-        return (<tr key="header">{this.props.children}</tr>);
-    }
-}
-
-
 export class List extends React.Component {
     static propTypes = {
         data : React.PropTypes.object,
