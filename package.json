@@ -1,6 +1,6 @@
 {
   "name": "i-react-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "iReact utils",
   "license": "UNLICENSED",
   "author": "m-szalik",
@@ -48,7 +48,7 @@
   },
   "scripts": {
     "test": "./node_modules/karma/bin/karma start test/karma.conf.js",
-    "build": "./node_modules/babel-cli/bin/babel.js ./src --plugins add-module-exports --out-dir ./lib;"
+    "preinstall": "./node_modules/babel-cli/bin/babel.js --plugins add-module-exports --out-dir ./lib --no-comments --compact true --minified ./src/"
   },
   "repository": {
     "type": "git",
