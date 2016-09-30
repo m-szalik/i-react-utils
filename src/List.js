@@ -10,9 +10,13 @@ export class List extends React.Component {
 
     constructor(props) {
         super();
+        let id = props.id;
+        if (id == undefined) {
+            id = (Math.random() * 1000);
+        }
         this.props = props;
         this.state = {  };
-        this.name = "list-" + (Math.random() * 1000);
+        this.name = "list-" + id;
         this.handlePageChange = this.handlePageChange.bind(this);
         this.data = this.data.bind(this);
         if (this.props.renderRow == undefined) {
@@ -31,7 +35,7 @@ export class List extends React.Component {
             items : data.items,
             count : data.paging.count,
             total : data.paging.total,
-            page : data.paging.page
+            page :  data.paging.page
         };
         this.setState(update);
     }
@@ -60,7 +64,7 @@ export class List extends React.Component {
                     {(() => {
                         const rows = [];
                         this.state.items.forEach((item, index) => {
-                            let key = comp.name + '-row-' + index;
+                            let key = this.name + '-row-' + index;
                             let newRow = this.props.renderRow(item, index, key);
                             if (newRow != undefined && newRow != null) {
                                 if (Array.isArray(newRow)) {

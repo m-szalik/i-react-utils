@@ -11,6 +11,40 @@ export function isEmptyObject(obj) {
 }
 
 
+export function isNotBlank(str) {
+    return str != undefined && str != null && str != false && str.trim().length > 0;
+}
+
+export function setObjProperty(obj, propertyPath, value) {
+    let paths = propertyPath.split('.');
+    let op = obj;
+    for(let i=0; i<paths.length -1; i++) {
+        const path = paths[i];
+        let on = op[path];
+        if (on == undefined || on == null) {
+            on = {};
+            op[path] = on;
+        }
+        op = on;
+    }
+    let prop = paths[paths.length -1];
+    op[prop] = value;
+}
+
+export function getObjProperty(obj, propertyPath) {
+    let paths = propertyPath.split('.');
+    let o = obj;
+    for(let i=0; i<paths.length; i++) {
+        const path = paths[i];
+        o = o[path];
+        if (o == undefined || o == null) {
+            return null;
+        }
+    }
+    return o;
+}
+
+
 
 export function isValidNIP(nip) {
     var nip_bez_kresek = nip.replace(/-/g,"");
@@ -55,39 +89,5 @@ export function isValidREGON(regon) {
 export function isValidEmail(email) {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
-}
-
-
-export function isNotBlank(str) {
-    return str != undefined && str != null && str != false && str.trim().length > 0;
-}
-
-export function setObjProperty(obj, propertyPath, value) {
-    let paths = propertyPath.split('.');
-    let op = obj;
-    for(let i=0; i<paths.length -1; i++) {
-        const path = paths[i];
-        let on = op[path];
-        if (on == undefined || on == null) {
-            on = {};
-            op[path] = on;
-        }
-        op = on;
-    }
-    let prop = paths[paths.length -1];
-    op[prop] = value;
-}
-
-export function getObjProperty(obj, propertyPath) {
-    let paths = propertyPath.split('.');
-    let o = obj;
-    for(let i=0; i<paths.length; i++) {
-        const path = paths[i];
-        o = o[path];
-        if (o == undefined || o == null) {
-            return null;
-        }
-    }
-    return o;
 }
 
