@@ -12,7 +12,7 @@ export function isEmptyObject(obj) {
 
 
 export function isNotBlank(str) {
-    return str != undefined && str != null && str != false && str.trim().length > 0;
+    return str != undefined && str != null && str != false && str.toString().trim().length > 0;
 }
 
 export function setObjProperty(obj, propertyPath, value) {

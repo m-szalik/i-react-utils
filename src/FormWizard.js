@@ -10,7 +10,7 @@ export function createFormValidator(message, isValidFunction) {
 }
 
 export function createIsRequiredFormValidator(message) {
-    message = message || 'Pole jest wymagane';
+    message = message || 'Field is required';
     let validator = createFormValidator(message, function(value) {
         if (typeof value == 'string') {
             return !(value == null || value == undefined || value.trim().length == 0);
@@ -23,7 +23,7 @@ export function createIsRequiredFormValidator(message) {
 }
 
 export function createMinLengthFormValidator(minLength, message) {
-    message = message || 'Mimimalna długość to ' + minLength;
+    message = message || 'Min length ' + minLength;
     let validator = createFormValidator(message, function(value) {
         return ! (value == null || value == undefined || value.trim().length < minLength);
     });
@@ -32,7 +32,7 @@ export function createMinLengthFormValidator(minLength, message) {
 }
 
 export function createMaxLengthFormValidator(maxLength, message) {
-    message = message || 'Maksymalna długość to ' + maxLength;
+    message = message || 'Max length ' + maxLength;
     let validator = createFormValidator(message, function(value) {
         return (value == null || value == undefined || value.trim().length < maxLength);
     });
@@ -40,7 +40,7 @@ export function createMaxLengthFormValidator(maxLength, message) {
 }
 
 export function createEqLengthFormValidator(eqLength, message) {
-    message = message || 'Wymagana długość to ' + eqLength;
+    message = message || 'Required length ' + eqLength;
     let validator = createFormValidator(message, function(value) {
         return (value == null || value == undefined || value.trim().length == eqLength);
     });
@@ -51,7 +51,7 @@ export function createRegexLengthFormValidator(regex, message) {
     if (typeof regex === 'string') {
         regex = new RegExp(regex, "i");
     }
-    message = message || 'Niewłaściwy format (' + regex + ')';
+    message = message || 'Invalid pattern (' + regex + ')';
     let validator = createFormValidator(message, function(value) {
         if (value == undefined || value == null) {
             return true;
@@ -207,8 +207,9 @@ export class Input extends React.Component {
         const name = this.props.name;
         let type = this.props.type == undefined ? undefined : this.props.type.toLowerCase();
         if (type == 'checkbox') {
+            const chval = this.value();
             return (<div className={` ${this.props.outerClassName} ${this.state.error != null ? 'has-error' : ''} `}>
-                        <div className="checkbox"><label><input type="checkbox" {...this.inputProps} value={this.value()} />{this.props.label}</label></div>
+                        <div className="checkbox"><label><input type="checkbox" {...this.inputProps} value={chval==null?undefined:chval} checked={chval==undefined?false:chval} />{this.props.label}</label></div>
                     </div>);
         } else {
             return (
@@ -258,7 +259,7 @@ export class Form extends React.Component {
     };
 
     static propTypes = {
-        formData : React.PropTypes.object,   // where to save or get values
+        formData : React.PropTypes.object,          // where to save or get values
         instantValidation : React.PropTypes.bool,   // parameter to pass to Input(s)
         onValidationError : React.PropTypes.func,   // callback func(event, form)
         onSubmit : React.PropTypes.func             // callback func(event, form)
@@ -275,12 +276,23 @@ export class Form extends React.Component {
         this.formData = props.formData;
         this.formInputs = [];
         this.state = { };
-        this.handleOnSubmit = this.handleOnSubmit.bind(this);
+        this._handleOnSubmit = this._handleOnSubmit.bind(this);
         this.data = this.data.bind(this);
+        this.submit = this.submit.bind(this);
     }
+
+    componentWillReceiveProps() {
+        this.formData = this.props.formData;
+        this.forceUpdate();
+    }
+
 
     data() {
         return this.formData;
+    }
+
+    submit() {
+        this.refs.innerForm.submit();
     }
 
     getChildContext() {
@@ -290,8 +302,15 @@ export class Form extends React.Component {
         };
     }
 
+    componentWillMount() {
+        this.formProps = Object.assign({}, this.props);
+        delete this.formProps.formData; // clear it
+        delete this.formProps.instantValidation; // clear it
+        delete this.formProps.onValidationError; // clear it
+        delete this.formProps.onSubmit; // clear it
+    }
 
-    handleOnSubmit(event) {
+    _handleOnSubmit(event) {
         event.preventDefault();
         console.debug("Submit (Form)", event, this.formData);
         // validation
@@ -299,6 +318,9 @@ export class Form extends React.Component {
         this.formInputs.forEach((fin) => {
             if (! fin.validate()) {
                 ret = false;
+                if (console.debug) {
+                    console.debug('Invalid field', fin);
+                }
             }
         });
         if (ret) {
@@ -313,9 +335,11 @@ export class Form extends React.Component {
     }
 
     render() {
-        return (<form {...this.props} onSubmit={this.handleOnSubmit}>
-            {this.props.children}
-        </form>);
+        return (<div>
+            <form {...this.formProps} onSubmit={this._handleOnSubmit}>
+                {this.props.children}
+            </form>
+        </div>);
     }
 
 }

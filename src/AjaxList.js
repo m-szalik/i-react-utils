@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import {List,ListHeader} from './List';
+import {List} from './List';
 
 
 
@@ -7,13 +7,15 @@ export default class AjaxList extends List {
     static propTypes = {
         fetchDataCallback : React.PropTypes.func.isRequired,
         onError : React.PropTypes.func,
-        showAmount : React.PropTypes.bool // default false
+        renderRow : React.PropTypes.func.isRequired
     };
 
     constructor(props) {
         super(props);
         this._fetchData = this._fetchData.bind(this);
-        this.handlePageChange = this.handlePageChange.bind(this);
+        this._handlePageChange = this._handlePageChange.bind(this);
+        this.updateAndResetPage = this.updateAndResetPage.bind(this);
+        this.update = this.update.bind(this);
         this.currentPage = 1;
         this.state = { items : null, error:false };
     }
@@ -44,8 +46,8 @@ export default class AjaxList extends List {
         this._fetchData(1, false);
     }
 
-    handlePageChange(pg) {
-        super.handlePageChange(pg);
+    _handlePageChange(pg) {
+        super._handlePageChange(pg);
         this._fetchData(pg, true);
     }
 
@@ -53,7 +55,7 @@ export default class AjaxList extends List {
         this._fetchData(1, true);
     }
 
-    reload() {
+    update() {
         this._fetchData(this.currentPage, false);
     }
 

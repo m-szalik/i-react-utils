@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
 
 
-
 export default class Breadcrumbs extends React.Component {
     static childContextTypes = {
         breadcrumbs : PropTypes.object
@@ -54,12 +53,10 @@ export default class Breadcrumbs extends React.Component {
             return (
                 <div>
                     <div id="breadcrumb" className="row">
-                        <div className="container">
-                            <ol className="breadcrumb">
-                                <li><Link className="home" to="/"><span className="ico-panel ico-breadcrumb-home" aria-hidden="true"></span></Link></li>
-                                {items}
-                            </ol>
-                        </div>
+                        <ol className="breadcrumb">
+                            <li><Link className="home" to="/"><span className="ico-panel ico-breadcrumb-home" aria-hidden="true"></span></Link></li>
+                            {items}
+                        </ol>
                     </div>
                     {this.props.children}
                 </div>

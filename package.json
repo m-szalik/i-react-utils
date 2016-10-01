@@ -12,9 +12,10 @@
     "react": "^15.x.x",
     "react-bootstrap": "0.x",
     "react-dom": "^15.x.x",
-    "react-router": "^2.x.x"
+    "react-router": "^2.x.x",
+    "throttle-debounce": "^1.x.x"
   },
-"devDependencies": {
+  "devDependencies": {
     "assert": "*",
     "babel-cli": "^6.1.18",
     "babel-loader": "^6.2.0",

@@ -108,8 +108,7 @@ export class FilteredList extends React.Component {
     static propTypes = {
         filters : React.PropTypes.array.isRequired,
         baseURL : React.PropTypes.string.isRequired,
-        renderRow : React.PropTypes.func.isRequired,
-        showAmount : React.PropTypes.bool // default false
+        renderRow : React.PropTypes.func.isRequired
     };
 
     constructor(props) {
@@ -141,12 +140,12 @@ export class FilteredList extends React.Component {
         });
         return (<div>
             <div className="row">
-                <div className="col-xs-10 no-padding">
+                <div className="no-padding">
                     {filters}
                 </div>
             </div>
             <div className="row result-list">
-                <AjaxList ref="ajaxList" fetchDataCallback={this.fetchAjaxListCallback} renderRow={this.props.renderRow} showAmount={this.props.showAmount}>
+                <AjaxList ref="ajaxList" fetchDataCallback={this.fetchAjaxListCallback} renderRow={this.props.renderRow}>
                     {this.props.children}
                 </AjaxList>
             </div>
