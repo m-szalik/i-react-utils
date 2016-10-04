@@ -281,7 +281,8 @@ export class Form extends React.Component {
         this.submit = this.submit.bind(this);
     }
 
-    componentWillReceiveProps() {
+    componentWillReceiveProps(nextProps) {
+        this.props = nextProps;
         this.formData = this.props.formData;
         this.forceUpdate();
     }
