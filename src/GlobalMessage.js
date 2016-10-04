@@ -15,6 +15,16 @@ export default class GlobalMessage extends React.Component {
         this.state = { messages : this.messages };
         this.message = this.message.bind(this);
         this.clear = this.clear.bind(this);
+        this._inUse = false;
+    }
+
+    componentWillMount() {
+        this._inUse = true;
+        this.setState({messages: this.messages});
+    }
+
+    componentWillUnmount() {
+        this._inUse = false;
     }
 
     message(type, msg) {
@@ -28,7 +38,11 @@ export default class GlobalMessage extends React.Component {
         };
         let newArray = this.messages.slice(0);
         newArray.push(msgObj);
-        this.setState({messages : newArray});
+        if (this._inUse) {
+            this.setState({messages: newArray});
+        } else {
+            console.log("GlobalMessage: New message on an unmounted GlobalMessage Component:", "type=" + type, "message=" + msg);
+        }
         this.messages = newArray;
         return msgObj;
     }
@@ -38,14 +52,18 @@ export default class GlobalMessage extends React.Component {
         if (index > -1) {
             let newArray = this.state.messages.slice(0);
             newArray.splice(index, 1);
-            this.setState({messages : newArray});
+            if (this._inUse) {
+                this.setState({messages: newArray});
+            }
             this.messages = newArray;
         }
     }
 
     clear() {
         let array = [];
-        this.setState({messages : array});
+        if (this._inUse) {
+            this.setState({messages: array});
+        }
         this.messages = array;
     }
 
