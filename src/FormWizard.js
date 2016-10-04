@@ -90,6 +90,7 @@ export class Input extends React.Component {
 
     constructor(props) {
         super();
+        this.wizardIndex = -1;
         this.props = props;
         let required = props.required;
         props.validators.forEach((validator) => {
@@ -113,7 +114,7 @@ export class Input extends React.Component {
 
     componentWillMount() {
         // register field in form
-        this.context.wizard.formInputs.push(this);
+        this.wizardIndex = this.context.wizard.formInputs.push(this) -1;
         //prepare props for input
         this.inputProps = Object.assign({}, this.props, {onChange:this.handleChange, id:this.inputId, value:this.context.wizard.formData[this.props.name]});
         delete this.inputProps.formData; // clear it
@@ -131,7 +132,10 @@ export class Input extends React.Component {
     }
 
     componentWillUnmount() {
-        // TODO unregister from wizard
+        if (this.wizardIndex >= 0) {
+            delete this.context.wizard.formInputs[this.wizardIndex];
+            this.wizardIndex = -1;
+        }
     }
 
     validate() {
@@ -272,10 +276,9 @@ export class Form extends React.Component {
 
     constructor(props) {
         super();
-        this.props = props;
-        this.formData = props.formData;
         this.formInputs = [];
         this.state = { };
+        this.componentWillReceiveProps(props);
         this._handleOnSubmit = this._handleOnSubmit.bind(this);
         this.data = this.data.bind(this);
         this.submit = this.submit.bind(this);
@@ -283,7 +286,12 @@ export class Form extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
-        this.formData = this.props.formData;
+        this.formData = nextProps.formData;
+        this.formProps = Object.assign({}, nextProps);
+        delete this.formProps.formData; // clear it
+        delete this.formProps.instantValidation; // clear it
+        delete this.formProps.onValidationError; // clear it
+        delete this.formProps.onSubmit; // clear it
         this.forceUpdate();
     }
 
