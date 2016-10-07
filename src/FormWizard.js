@@ -85,11 +85,11 @@ export class Input extends React.Component {
         validators : [],
         className: "",
         outerClassName: ""
-
     };
 
     constructor(props) {
         super();
+        this._type = 'fw.Input';
         this.wizardIndex = -1;
         this.props = props;
         let required = props.required;
@@ -123,6 +123,7 @@ export class Input extends React.Component {
         delete this.inputProps.options; // clear it
         delete this.inputProps.instantValidation; // clear it
         delete this.inputProps.defaultValue; // clear it
+        delete this.inputProps.inputId;
         delete this.inputProps.outerClassName;
         if (this.props.type == 'checkbox') {
             this.inputProps.className = (this.props.className ? ' ' + this.props.className : '') + ' form-wizard-input form-wizard-input-' + this.props.type;
@@ -208,7 +209,6 @@ export class Input extends React.Component {
 
 
     render() {
-        const name = this.props.name;
         let type = this.props.type == undefined ? undefined : this.props.type.toLowerCase();
         if (type == 'checkbox') {
             const chval = this.value();
@@ -257,6 +257,7 @@ export class Input extends React.Component {
     }
 }
 
+
 export class Form extends React.Component {
     static childContextTypes = {
         wizard : React.PropTypes.object
@@ -276,6 +277,7 @@ export class Form extends React.Component {
 
     constructor(props) {
         super();
+        this.mounted = false;
         this.formInputs = [];
         this.state = { };
         this.componentWillReceiveProps(props);
@@ -283,6 +285,7 @@ export class Form extends React.Component {
         this.data = this.data.bind(this);
         this.submit = this.submit.bind(this);
     }
+
 
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
@@ -292,7 +295,9 @@ export class Form extends React.Component {
         delete this.formProps.instantValidation; // clear it
         delete this.formProps.onValidationError; // clear it
         delete this.formProps.onSubmit; // clear it
-        this.forceUpdate();
+        if (this.mounted) {
+            this.forceUpdate();
+        }
     }
 
 
@@ -301,7 +306,7 @@ export class Form extends React.Component {
     }
 
     submit() {
-        this.refs.innerForm.submit();
+        this.refs.innerForm.submit(); // fixme
     }
 
     getChildContext() {
@@ -309,14 +314,6 @@ export class Form extends React.Component {
         return {
             wizard: self
         };
-    }
-
-    componentWillMount() {
-        this.formProps = Object.assign({}, this.props);
-        delete this.formProps.formData; // clear it
-        delete this.formProps.instantValidation; // clear it
-        delete this.formProps.onValidationError; // clear it
-        delete this.formProps.onSubmit; // clear it
     }
 
     _handleOnSubmit(event) {
@@ -343,9 +340,18 @@ export class Form extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.componentWillReceiveProps(this.props);
+        this.mounted = true;
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
+    }
+
     render() {
         return (<div>
-            <form {...this.formProps} onSubmit={this._handleOnSubmit}>
+            <form {...this.formProps} ref="innerForm" onSubmit={this._handleOnSubmit}>
                 {this.props.children}
             </form>
         </div>);

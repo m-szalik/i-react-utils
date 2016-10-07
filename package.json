@@ -34,18 +34,19 @@
     "karma-coverage": "*",
     "karma-coveralls": "*",
     "karma-firefox-launcher": "*",
+    "karma-jasmine": "^1.0.2",
     "karma-mocha": "*",
     "karma-sourcemap-loader": "*",
     "karma-webpack": "*",
     "mocha": "*",
     "mocha-babel": "*",
     "node-uuid": "*",
+    "react-addons-test-utils": "^15.x.x",
     "regenerator": "*",
     "regenerator-loader": "*",
     "transform-loader": "*",
     "webpack": "*",
-    "webpack-dev-server": "*",
-    "react-addons-test-utils": "^15.0.3"
+    "webpack-dev-server": "*"
   },
   "scripts": {
     "test": "./node_modules/karma/bin/karma start test/karma.conf.js",

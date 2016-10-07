@@ -16,6 +16,12 @@ export function isNotBlank(str) {
 }
 
 export function setObjProperty(obj, propertyPath, value) {
+    if (obj === null || obj === undefined) {
+        throw 'Target cannot be null nor undefined but was ' + obj;
+    }
+    if (typeof obj !== 'object') {
+        throw 'Target must be an object but was ' + (typeof obj);
+    }
     let paths = propertyPath.split('.');
     let op = obj;
     for(let i=0; i<paths.length -1; i++) {
@@ -32,6 +38,9 @@ export function setObjProperty(obj, propertyPath, value) {
 }
 
 export function getObjProperty(obj, propertyPath) {
+    if (obj === null || obj === undefined) {
+        return undefined;
+    }
     let paths = propertyPath.split('.');
     let o = obj;
     for(let i=0; i<paths.length; i++) {

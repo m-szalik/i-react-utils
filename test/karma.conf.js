@@ -2,6 +2,10 @@ var path = require("path");
 
 module.exports = function (karma) {
   var options = {
+    logLevel: karma.LOG_INFO,
+    colors: true,
+    autoWatch: true,
+    singleRun: false,
     files: [
       'tests.bundle.js'
     ],
@@ -87,7 +91,6 @@ module.exports = function (karma) {
       type: 'lcov',
       dir: 'coverage/'
     },
-    singleRun: true,
     webpack: {
       resolve: {
         extensions: ['', '.js', '.jsx']
@@ -114,7 +117,7 @@ module.exports = function (karma) {
     browserNoActivityTimeout: 30000,
     browserDisconnectTolerance: 2,
     webpackMiddleware: {
-      noInfo: true,
+      noInfo: true
     }
   };
   if(process.env.BROWSERSTACK_USERNAME && process.env.BROWSERSTACK_ACCESS_KEY) {
@@ -127,7 +130,8 @@ module.exports = function (karma) {
       return key.indexOf("bs_") !== -1;
     });
   } else {
-    options.browsers = ['Chrome', 'Firefox'];
+    options.browsers = ['Firefox'];
+    //options.browsers = ['Chrome', 'Firefox'];
   }
   if(process.env.COVERALLS_REPO_TOKEN) {
     options.reporters.push('coveralls');
