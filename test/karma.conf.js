@@ -5,7 +5,7 @@ module.exports = function (karma) {
     logLevel: karma.LOG_INFO,
     colors: true,
     autoWatch: true,
-    singleRun: true,// change to false when developing
+    singleRun: false,
     files: [
       'tests.bundle.js'
     ],
