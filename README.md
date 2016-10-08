@@ -10,7 +10,7 @@ React components.
 
 ```
 <List data={dataObject see below} renderRow={function(item,index,reactRowKey) {}}>
-    (Optional table head row)
+    (<tr>Optional table head row</tr>)
 </List>
 ```
 

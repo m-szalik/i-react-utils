@@ -15,7 +15,7 @@ export class List extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
-        let id = props.id;
+        let id = nextProps.id;
         if (id == undefined) {
             id = "list-" + (Math.random() * 10000);
         }

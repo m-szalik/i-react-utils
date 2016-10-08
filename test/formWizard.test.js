@@ -16,7 +16,7 @@ describe("Form Wizard", function() {
       const componentDefinition = (<fw.Form onSubmit={submitCallback} onValidationError={submitCallback}>
               <fw.Input type="checkbox" name="mainSection.enabled" inputId="inp-chb" label="Input one"/>
               <fw.Input type="text" name="mainSection.text" inputId="inp-txt" label="Input text"/>
-              <input type="text" name="pure" value="pureDefault"/>
+              <input type="text" name="pure" defaultValue="pureDefault"/>
               <input type="submit" className="btn-primary" />
           </fw.Form>);
       const component = TestUtils.renderIntoDocument(componentDefinition);
