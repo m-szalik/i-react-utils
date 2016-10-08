@@ -10,10 +10,8 @@
   },
   "dependencies": {
     "react": "^15.x.x",
-    "react-bootstrap": "0.x",
     "react-dom": "^15.x.x",
-    "react-router": "^2.x.x",
-    "throttle-debounce": "^1.x.x"
+    "react-router": "^2.x.x"
   },
   "devDependencies": {
     "assert": "*",
