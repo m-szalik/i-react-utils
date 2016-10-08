@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 
 
-export class List extends React.Component {
+export default class List extends React.Component {
     static propTypes = {
         data : React.PropTypes.any.isRequired, // object with property items or an array
         renderRow : React.PropTypes.func.isRequired
