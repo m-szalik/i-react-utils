@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
-import {List} from './List';
-
-
+import List from './List';
 
 export default class AjaxList extends List {
     static propTypes = {
