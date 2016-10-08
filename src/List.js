@@ -9,18 +9,23 @@ export class List extends React.Component {
 
     constructor(props) {
         super();
+        this.state = { };
+        this.componentWillReceiveProps(props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.props = nextProps;
         let id = props.id;
         if (id == undefined) {
             id = "list-" + (Math.random() * 10000);
         }
-        this.props = props;
-        this.state = {  };
         this.id = id;
         this._handlePageChange = this._handlePageChange.bind(this);
         this.data = this.data.bind(this);
         if (this.props.renderRow == undefined) {
             throw 'Missing function renderRow(item,index,key):component';
         }
+        this.data(nextProps.data);
     }
 
     componentDidMount() {
