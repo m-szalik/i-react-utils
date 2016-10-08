@@ -56,24 +56,21 @@ export function getObjProperty(obj, propertyPath) {
 
 
 export function isValidNIP(nip) {
-    var nip_bez_kresek = nip.replace(/-/g,"");
+    var nipNoDashes = nip.replace(/-/g,"");
     var reg = /^[0-9]{10}$/;
-    if(reg.test(nip_bez_kresek) == false) {
+    if(reg.test(nipNoDashes) == false) {
         return false;
     } else {
-        var dig = ("" + nip_bez_kresek).split("");
-        var kontrola = (6 * parseInt(dig[0]) + 5 * parseInt(dig[1]) + 7 * parseInt(dig[2]) + 2 * parseInt(dig[3]) + 3 * parseInt(dig[4]) + 4 * parseInt(dig[5]) + 5 * parseInt(dig[6]) + 6 * parseInt(dig[7]) + 7 * parseInt(dig[8])) % 11;
-        return parseInt(dig[9]) == kontrola;
+        var dig = ("" + nipNoDashes).split("");
+        var check = (6 * parseInt(dig[0]) + 5 * parseInt(dig[1]) + 7 * parseInt(dig[2]) + 2 * parseInt(dig[3]) + 3 * parseInt(dig[4]) + 4 * parseInt(dig[5]) + 5 * parseInt(dig[6]) + 6 * parseInt(dig[7]) + 7 * parseInt(dig[8])) % 11;
+        return parseInt(dig[9]) == check;
     }
 }
 
 export function isValidREGON(regon) {
-    //REGON is a 9 or 14 digit number. Last digit is control digit from equation:
-    // [ sum from 1 to (9 or 14) (x[i]*w[i]) ] mod 11; where x[i] is pointed NIP digit and w[i] is pointed digit
-    //from [8 9 2 3 4 5 6 7] for 9 and [2 4 8 5 0 9 7 3 6 1 2 4 8] for 14 digits.
     let n = regon.length;
     let w;
-    let cd = 0; // Control digit (last digit)
+    let cd = 0; // Control digit
     let isOnlyDigit = /^\d+$/.test(regon);
     if ( (n !== 9 && n !== 14) || !isOnlyDigit || parseInt(regon) === 0) {
         return false;

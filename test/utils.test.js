@@ -2,7 +2,7 @@ import assert from "assert";
 import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from 'react-addons-test-utils';
-import {isNotBlank,isEmptyObject,setObjProperty,getObjProperty} from '../src/index';
+import {isNotBlank,isEmptyObject,setObjProperty,getObjProperty, isValidNIP, isValidREGON, isValidEmail} from '../src/index';
 
 
 describe("Utils - isNotBlank", function() {
@@ -69,5 +69,25 @@ describe("Utils - getObjProperty", function() {
     });
     it("getObjProperty - value 119", () => {
         assert(getObjProperty({a:{b:119}}, "a.b") === 119, "Value expected");
+    });
+});
+
+describe("Utils - validators", function() {
+    this.timeout(100);
+
+    it("isValidNIP", () => {
+        assert(isValidNIP('8196895375'));
+        assert(! isValidNIP('98236'));
+    });
+
+    it("isValidREGON", () => {
+        assert(! isValidREGON('12345678'));
+        assert(isValidREGON('650404553')); // 9 digits
+        assert(isValidREGON('19543451407739')); // 14 digits
+    });
+
+    it("isValidEmail", () => {
+        assert(! isValidEmail('somebody@somewhere.a'));
+        assert(isValidEmail('somebody@somewhere.dot'));
     });
 });
