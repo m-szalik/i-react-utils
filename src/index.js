@@ -7,10 +7,10 @@ var fw = require('./FormWizard');
 
 module.exports = utils;
 module.exports.fw = fw;
-module.exports.GlobalMessage = require('./GlobalMessage');
-module.exports.Breadcrumbs = require('./Breadcrumbs');
-module.exports.List = require('./List');
-module.exports.AjaxList = require('./AjaxList');
+module.exports.GlobalMessage = require('./GlobalMessage').default;
+module.exports.Breadcrumbs = require('./Breadcrumbs').default;
+module.exports.List = require('./List').default;
+module.exports.AjaxList = require('./AjaxList').default;
 
 
 // Polyfills:
