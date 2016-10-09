@@ -104,7 +104,7 @@ export default class GlobalMessage extends React.Component {
         let id = 0;
         this.state.messages.forEach((m) => {
             let key='globalMessage-' + id;
-            messages.push((<div key={key} className={`alert alert-${m.type}`} role="alert" dangerouslySetInnerHTML={{__html: m.msg}}/>));
+            messages.push((<div key={key} className={`globalMessage alert alert-${m.type}`} role="alert" dangerouslySetInnerHTML={{__html: m.msg}}/>));
             id++;
         });
 
