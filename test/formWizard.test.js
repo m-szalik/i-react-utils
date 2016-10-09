@@ -2,7 +2,7 @@ import assert from "assert";
 import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from 'react-addons-test-utils';
-import {fw} from '../src/index';
+import * as fw from '../src/FormWizard';
 
 
 describe("Form Wizard", function() {
