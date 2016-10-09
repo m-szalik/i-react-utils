@@ -4,13 +4,15 @@ module.exports.__esModule = true;
 
 var utils = require('./utils');
 var fw = require('./FormWizard');
+var bcFactory = require('./Breadcrumbs');
 
 module.exports = utils;
 module.exports.fw = fw;
-module.exports.GlobalMessage = require('./GlobalMessage').default;
-module.exports.Breadcrumbs = require('./Breadcrumbs').default;
-module.exports.List = require('./List').default;
-module.exports.AjaxList = require('./AjaxList').default;
+module.exports.GlobalMessage = require('./GlobalMessage');
+module.exports.Breadcrumbs = bcFactory.Breadcrumbs;
+module.exports.bc = bcFactory.bc;
+module.exports.List = require('./List');
+module.exports.AjaxList = require('./AjaxList');
 
 
 // Polyfills:
