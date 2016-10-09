@@ -60,7 +60,7 @@ export default class AjaxList extends List {
     render() {
         if (this.state.items == null) {
             if (! this.state.error) {
-                return (<div className="row"><img className="center-block ajax-loader" alt="..."/></div>);
+                return (<div className="row"><div className="center-block ajaxList-loader"></div></div>);
             }
         } else {
             return super.render();

@@ -1,14 +1,22 @@
 import React, { PropTypes } from 'react';
 
-
 export default class List extends React.Component {
     static propTypes = {
         data : React.PropTypes.any.isRequired, // object with property items or an array
-        renderRow : React.PropTypes.func.isRequired
+        renderRow : React.PropTypes.func.isRequired,
+        onPageChanged : React.PropTypes.func,
+        onDataChanged : React.PropTypes.func,
+        showPagination : React.PropTypes.bool // default true
+    };
+
+    static defaultProps = {
+        showPagination : true
     };
 
     constructor(props) {
         super();
+        this.thead = null;
+        this.tfoot = null;
         this.state = { };
         this.componentWillReceiveProps(props);
     }
@@ -26,6 +34,25 @@ export default class List extends React.Component {
             throw 'Missing function renderRow(item,index,key):component';
         }
         this.data(nextProps.data);
+        if (nextProps.children != undefined) {
+            const children = Array.isArray(nextProps.children) ? nextProps.children : [nextProps.children];
+            for (let i = 0; i < children.length; i++) {
+                if (children[i] == null || children[i] == undefined) {
+                    continue;
+                }
+                switch (children[i].type) {
+                    case 'tfoot':
+                        this.tfoot = children[i];
+                        break;
+                    case 'thead':
+                        this.thead = children[i];
+                        break;
+                    default:
+                        console.error('List can contain thead or tfoot components only, but', children[i], 'found in list ' + id);
+                        throw new Error('List can contain thead or tfoot components only.');
+                }
+            }
+        }
     }
 
     componentDidMount() {
@@ -36,7 +63,7 @@ export default class List extends React.Component {
 
     data(data) {
         if (data == null || data == undefined) {
-            return;
+            return this.state;
         }
         let update;
         if (Array.isArray(data)) {
@@ -50,11 +77,22 @@ export default class List extends React.Component {
             };
         }
         this.setState(update);
+        if (this.props.onDataChanged != undefined) {
+            this.props.onDataChanged(update);
+        }
     }
 
     _handlePageChange(pg) {
         if (this.props.onPageChanged != undefined) {
-            this.onPageChanged(pg);
+            this.props.onPageChanged(pg);
+        }
+    }
+
+    _renderPart(component) {
+        if (component != undefined && component != null) {
+            return component;
+        } else {
+            return null;
         }
     }
 
@@ -64,13 +102,9 @@ export default class List extends React.Component {
             return null;
         }
         return (
-            <div id={this.id} key={this.name}>
-                <table className={`table ${this.props.className}`} style={{width:'100%'}} id={this.id + '-table'}>
-                    {(() => {
-                        if (this.props.children != null) {
-                            return (<thead>{this.props.children}</thead>);
-                        }
-                    })()}
+            <div id={this.name} key={this.name}>
+                <table className={`table ${this.props.className}`} style={{width:'100%'}} id={this.name + "-table"}>
+                    {(() => { return this._renderPart(this.thead) })()}
                     {(() => {
                         const rows = [];
                         this.state.items.forEach((item, index) => {
@@ -78,7 +112,7 @@ export default class List extends React.Component {
                             let newRow = self.props.renderRow(item, index, key);
                             if (newRow != undefined && newRow != null) {
                                 if (Array.isArray(newRow)) {
-                                    throw 'Can return single <tr> component only';
+                                    throw 'Can return single &lt;tr&gt; component only';
                                 } else {
                                     rows.push(newRow);
                                 }
@@ -86,36 +120,38 @@ export default class List extends React.Component {
                         });
                         return (<tbody>{rows}</tbody>);
                     })()}
+                    {(() => { return this._renderPart(this.tfoot) })()}
                 </table>
-                <div className="row pagination-container">
-                    {(() => {
-                        if (this.state.page != undefined) {
-                            let pages = Math.ceil(self.state.total / self.state.count);
-                            if (pages > 1) {
-                                return (
-                                    <nav aria-label="Page navigation" className="list-pagination" id={`${this.id}-pagination`}>
-                                        <ul className="pagination">
-                                            {(() => {
-                                                let pg = [];
-                                                pg.push((<li key="pg-prev" className={self.state.page < 2 ? "disabled" : ""}><a
-                                                    onClick={function() { if (self.state.page > 1) { self._handlePageChange(self.state.page -1) }}}
-                                                    aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>));
-                                                for (let p = 1; p <= pages; p++) {
-                                                    pg.push((<li key={`pg-pg-${p}`} className={p == self.state.page ? "active" : ""}><a
-                                                        onClick={function() { if (p != self.state.page) { self._handlePageChange(p) }}}>{p}</a></li>));
-                                                }
-                                                pg.push((<li className={pages <= self.state.page ? "disabled" : ""} key="pg-next"><a
-                                                    onClick={function() { if (pages > self.state.page) { self._handlePageChange(self.state.page +1) }}}
-                                                    aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>));
-                                                return pg;
-                                            })()}
-                                        </ul>
-                                    </nav>
-                                );
-                            }
-                        }
-                    })()}
-                </div>
+                {(() => {
+                    if (this.props.showPagination) {
+                        return (<div className="row pagination-container">
+                            {(() => {
+                                if (this.state.page != undefined) {
+                                    let pages = Math.ceil(self.state.total / self.state.count);
+                                    if (pages > 1) {
+                                        return (
+                                            <nav aria-label="Page navigation" className="list-pagination" id={`${this.id}-pagination`}>
+                                                <ul className="pagination">
+                                                    {(() => {
+                                                        let pg = [];
+                                                        pg.push((<li key="pg-prev" className={self.state.page < 2 ? "disabled" : ""}><a onClick={function() { if (self.state.page > 1) { self._handlePageChange(self.state.page -1) }}} aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>));
+                                                        for (let p = 1; p <= pages; p++) {
+                                                            pg.push((<li key={`pg-pg-${p}`} className={p == self.state.page ? "active" : ""}><a onClick={function() { if (p != self.state.page) { self._handlePageChange(p) }}}>{p}</a></li>));
+                                                        }
+                                                        pg.push((<li className={pages <= self.state.page ? "disabled" : ""} key="pg-next"><a onClick={function() { if (pages > self.state.page) { self._handlePageChange(self.state.page +1) }}} aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>));
+                                                        return pg;
+                                                    })()}
+                                                </ul>
+                                            </nav>
+                                        );
+                                    }
+                                }
+                            })()}
+                        </div>);
+                    } else {
+                        return null;
+                    }
+                })()}
             </div>
         );
     }

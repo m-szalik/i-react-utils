@@ -1,8 +1,11 @@
 import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
 
+export function bc(link, label) {
+    return { link: link, label : label };
+}
 
-export default class Breadcrumbs extends React.Component {
+export class Breadcrumbs extends React.Component {
     static childContextTypes = {
         breadcrumbs : PropTypes.object
     };
