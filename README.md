@@ -10,7 +10,7 @@ React components.
 
 ```
 <List data={dataObject see below} renderRow={function(item,index,reactRowKey) {}}>
-    (<tr>Optional table head row</tr>)
+    (Optional table head elements thead or tfoot)
 </List>
 ```
 
@@ -32,7 +32,7 @@ Where:
     onError={function(err) {}},
     fetchDataCallback={function(pageNum) {}}
     >
-    (Optional table head row)
+    (Optional table head elements thead or tfoot)
 </AjaxList>
 ```
 
