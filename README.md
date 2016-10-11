@@ -9,16 +9,16 @@ React components.
 `import {List} from 'i-react-utils';`
 
 ```
-<List data={dataObject see below} renderRow={function(item,index,reactRowKey) {}}>
-    (Optional table head elements thead or tfoot)
+<List data={dataObject see below} renderRow={function(item,index,reactRowKey) { return (<tr key={reactRowKey}>...</tr>);}}>
+    (Optional table elements thead or tfoot)
 </List>
 ```
 
 Where:
  * **data** can be one of:
-   * { items: arrayOfData, paging: {count: numItemsOn, total:numOfTotalItems, page:currenPageNumber} }
+   * { items: arrayOfData, paging: {count: numItemsOn, total:numOfTotalItems, page:currentPageNumber} }
    * Array of items
- * **renderRow** = function that returns &lt;tr&gt; component.
+ * **renderRow** = function that returns &lt;tr&gt; component for each element of data.
 
 **Methods:**
  * `void data(dataObject); // see above`
@@ -28,26 +28,25 @@ Where:
 
 ```
 <AjaxList
-    renderRow={function(item,index,reactRowKey) {}}
+    renderRow={function(item,index,reactRowKey) { return (<tr key={reactRowKey}>...</tr>); }}
     onError={function(err) {}},
     fetchDataCallback={function(pageNum) {}}
     >
-    (Optional table head elements thead or tfoot)
+    (Optional table elements thead or tfoot)
 </AjaxList>
 ```
 
-Where **fetchDataCallback** is a function that return Promise of ajax request.
+Where:
+ * **fetchDataCallback** is a function that return Promise of ajax request. Argument pageNum is one-indexed.
+ * **renderRow** = function that returns &lt;tr&gt; component for each element of data.
 
 **Methods:**
  * `void updateAndResetPage()`
  * `void update()`
 
-### FilteredList
-TODO
-
 ### FormWizard
 `import {fw} from 'i-react-utils';`
-
+TODO
 
 
 ### GlobalMessage
@@ -58,6 +57,21 @@ This component should wrap a page content.
 ```
 <GlobalMessage>{ this.props.children }</GlobalMessage>
 ```
+
+Usage:
+```
+class Page extends React.Component {
+    static contextTypes = {
+        messenger : React.PropTypes.object
+    };
+
+    onError(error) {
+        this.context.messenger.clear();
+        this.context.messenger.error('Error ' + error);
+    }
+}
+```
+
 ## Utils and helpers:
 
 `import {isEmptyObject, isNotBlank, setObjProperty, getObjProperty, isValidNIP, isValidREGON, isValidEmail} from 'i-react-utils';`

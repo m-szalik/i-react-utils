@@ -2,11 +2,12 @@ import React, { PropTypes } from 'react';
 
 export default class List extends React.Component {
     static propTypes = {
-        data : React.PropTypes.any.isRequired, // object with property items or an array
+        data : React.PropTypes.any, // object with property items or an array
         renderRow : React.PropTypes.func.isRequired,
         onPageChanged : React.PropTypes.func,
         onDataChanged : React.PropTypes.func,
-        showPagination : React.PropTypes.bool // default true
+        showPagination : React.PropTypes.bool, // default true
+        pagesCount : React.PropTypes.number // number of pages (have to be set in data is an array and pagination is used)
     };
 
     static defaultProps = {
@@ -15,10 +16,15 @@ export default class List extends React.Component {
 
     constructor(props) {
         super();
+        this._inUse = false;
+        this._data = null;
         this.thead = null;
         this.tfoot = null;
         this.state = { };
+        this.page = 0;
         this.componentWillReceiveProps(props);
+        this._handlePageChange = this._handlePageChange.bind(this);
+        this.data = this.data.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -28,12 +34,9 @@ export default class List extends React.Component {
             id = "list-" + (Math.random() * 10000);
         }
         this.id = id;
-        this._handlePageChange = this._handlePageChange.bind(this);
-        this.data = this.data.bind(this);
         if (this.props.renderRow == undefined) {
             throw 'Missing function renderRow(item,index,key):component';
         }
-        this.data(nextProps.data);
         if (nextProps.children != undefined) {
             const children = Array.isArray(nextProps.children) ? nextProps.children : [nextProps.children];
             for (let i = 0; i < children.length; i++) {
@@ -56,18 +59,32 @@ export default class List extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.data != undefined) {
-            this.data(this.props.data);
+        if (this._data != null) {
+            this.setState(this._data);
         }
     }
 
+    componentWillUnmount() {
+        this._inUse = false;
+    }
+
+    componentWillMount() {
+        this._inUse = true;
+    }
+
     data(data) {
+        console.log('DataSet', data);
         if (data == null || data == undefined) {
             return this.state;
         }
         let update;
         if (Array.isArray(data)) {
-            update = { items: data };
+            update = {
+                items: data,
+                count: data.length,
+                total: data.length * this.props.pagesCount,
+                page:  this.page
+            };
         } else {
             update = {
                 items: data.items,
@@ -76,7 +93,10 @@ export default class List extends React.Component {
                 page:  data.paging.page
             };
         }
-        this.setState(update);
+        this._data = update;
+        if (this._inUse) {
+            this.setState(update);
+        }
         if (this.props.onDataChanged != undefined) {
             this.props.onDataChanged(update);
         }
@@ -86,6 +106,7 @@ export default class List extends React.Component {
         if (this.props.onPageChanged != undefined) {
             this.props.onPageChanged(pg);
         }
+        this.page = pg;
     }
 
     _renderPart(component) {
