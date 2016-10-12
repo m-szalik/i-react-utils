@@ -61,6 +61,8 @@ export default class AjaxList extends List {
         if (this.state.items == null) {
             if (! this.state.error) {
                 return (<div className="row"><div className="center-block ajaxList-loader"></div></div>);
+            } else {
+                return (<div className="row">An error occurred.</div>);
             }
         } else {
             return super.render();
