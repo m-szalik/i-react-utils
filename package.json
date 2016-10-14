@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "react": "^15.x.x",
-    "react-dom": "^15.x.x",
     "react-router": "^2.x.x"
   },
   "devDependencies": {
@@ -39,6 +38,7 @@
     "mocha": "*",
     "mocha-babel": "*",
     "node-uuid": "*",
+    "react-dom": "^15.x.x",
     "react-addons-test-utils": "^15.x.x",
     "regenerator": "*",
     "regenerator-loader": "*",
@@ -48,7 +48,8 @@
   },
   "scripts": {
     "test": "./node_modules/karma/bin/karma start test/karma.conf.js",
-    "build": "./node_modules/babel-cli/bin/babel.js --plugins add-module-exports --out-dir ./lib --no-comments --compact true --minified ./src/"
+    "build": "./node_modules/babel-cli/bin/babel.js --plugins add-module-exports --out-dir ./lib --no-comments --compact true --minified ./src/",
+    "start": "node ./example/server.js"
   },
   "repository": {
     "type": "git",
