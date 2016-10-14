@@ -9,7 +9,6 @@ describe("GlobalMessage", function() {
   this.timeout(30000);
 
   it("Render GlobalMessage", () => {
-      console.log('LOG_', GlobalMessage);
       const componentDefinition = (<GlobalMessage><span>Some text here</span></GlobalMessage>);
       const component = TestUtils.renderIntoDocument(componentDefinition);
   });
