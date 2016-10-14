@@ -307,7 +307,6 @@ export class Form extends React.Component {
         this.componentWillReceiveProps(props);
         this._handleOnSubmit = this._handleOnSubmit.bind(this);
         this.data = this.data.bind(this);
-        this.submit = this.submit.bind(this);
     }
 
 
@@ -330,9 +329,6 @@ export class Form extends React.Component {
         return this.formData;
     }
 
-    submit() {
-        this.refs.innerForm.submit(); // fixme
-    }
 
     getChildContext() {
         const self = this;
@@ -376,7 +372,7 @@ export class Form extends React.Component {
 
     render() {
         return (<div>
-            <form {...this.formProps} ref="innerForm" onSubmit={this._handleOnSubmit}>
+            <form {...this.formProps} onSubmit={this._handleOnSubmit}>
                 {this.props.children}
             </form>
         </div>);
