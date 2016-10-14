@@ -88,8 +88,8 @@ module.exports = function (karma) {
       return key.indexOf("bs_") !== -1;
     });
   } else {
-    //options.browsers = ['Firefox'];
-    options.browsers = ['Chrome', 'Firefox'];
+    options.browsers = ['Firefox'];
+    //options.browsers = ['Chrome', 'Firefox'];
   }
   if(process.env.COVERALLS_REPO_TOKEN) {
     options.reporters.push('coveralls');

@@ -4,7 +4,6 @@ import ReactDOM from "react-dom";
 import TestUtils from 'react-addons-test-utils';
 import List from '../src/List';
 
-
 describe("List", function() {
   this.timeout(30000);
 
@@ -19,6 +18,7 @@ describe("List", function() {
       const component = TestUtils.renderIntoDocument(componentDefinition);
       const trs = TestUtils.scryRenderedDOMComponentsWithTag(component, 'tr');
       const tds = TestUtils.scryRenderedDOMComponentsWithTag(component, 'td');
+
       assert(trs.length == data.length +2, "TRs not OK"); // +1 for header and +1 for footer
       assert(tds.length == data.length, "TDs not OK");
   });
