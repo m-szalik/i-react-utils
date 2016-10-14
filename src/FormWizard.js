@@ -262,7 +262,6 @@ export class Input extends React.Component {
         if (wrapper == undefined) {
             wrapper = this.context.wizard.props.wrapper;
         }
-        console.debug("Rendering input " + type, input, wrapper);
         if (wrapper == undefined || wrapper == null) {
             return input;
         } else {
