@@ -56,6 +56,9 @@ export default class List extends React.Component {
                 }
             }
         }
+        if (nextProps.data) {
+            this.data(nextProps.data);
+        }
     }
 
     componentDidMount() {
@@ -73,7 +76,7 @@ export default class List extends React.Component {
     }
 
     data(data) {
-        console.log('DataSet', data);
+        console.log('DataSet', data, typeof data);
         if (data == null || data == undefined) {
             return this.state;
         }
