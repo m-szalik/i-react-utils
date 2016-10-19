@@ -28,6 +28,7 @@ export default class List extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        this.pagesCount = nextProps.pagesCount;
         this.props = nextProps;
         let id = nextProps.id;
         if (id == undefined) {
@@ -82,10 +83,13 @@ export default class List extends React.Component {
         }
         let update;
         if (Array.isArray(data)) {
+            if (this.props.showPagination && this.pagesCount == undefined) {
+                throw new Error('Got array of data and pagination was required but pagesCount is not set.');
+            }
             update = {
                 items: data,
                 count: data.length,
-                total: data.length * this.props.pagesCount,
+                total: data.length * this.pagesCount,
                 page:  this.page
             };
         } else {

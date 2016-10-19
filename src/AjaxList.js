@@ -27,6 +27,9 @@ export default class AjaxList extends List {
         }
         let promise = this.props.fetchDataCallback(page);
         promise.then((resp) => {
+                            if (Array.isArray(resp.data)) {
+                                this.pagesCount = page + 1;
+                            }
                             this.data(resp.data);
                         },
                         (err) => {
