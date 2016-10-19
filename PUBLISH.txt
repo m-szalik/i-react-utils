@@ -1,3 +1,4 @@
 npm run build
 npm publish
+git tag i-react-utils-x.x.x
 
