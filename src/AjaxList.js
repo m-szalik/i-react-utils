@@ -5,7 +5,12 @@ export default class AjaxList extends List {
     static propTypes = {
         fetchDataCallback : React.PropTypes.func.isRequired,
         onError : React.PropTypes.func,
-        renderRow : React.PropTypes.func.isRequired
+        renderRow : React.PropTypes.func.isRequired,
+        showPagination : React.PropTypes.bool // default true
+    };
+
+    static defaultProps = {
+        showPagination : true
     };
 
     constructor(props) {
@@ -16,6 +21,12 @@ export default class AjaxList extends List {
         this.update = this.update.bind(this);
         this.currentPage = 1;
         this.state = { items : null, error:false };
+    }
+
+    _checkData(data) {
+        if (Array.isArray(data) && this.props.showPagination && this.pagesCount == undefined) {
+            throw new Error('Got array of data and pagination was required but pagesCount is not set.');
+        }
     }
 
     _fetchData(page, withClear) {

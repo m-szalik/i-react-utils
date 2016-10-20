@@ -6,12 +6,12 @@ export default class List extends React.Component {
         renderRow : React.PropTypes.func.isRequired,
         onPageChanged : React.PropTypes.func,
         onDataChanged : React.PropTypes.func,
-        showPagination : React.PropTypes.bool, // default true
+        showPagination : React.PropTypes.bool, // default false
         pagesCount : React.PropTypes.number // number of pages (have to be set in data is an array and pagination is used)
     };
 
     static defaultProps = {
-        showPagination : true
+        showPagination : false
     };
 
     constructor(props) {
@@ -24,6 +24,7 @@ export default class List extends React.Component {
         this.page = 0;
         this.componentWillReceiveProps(props);
         this._handlePageChange = this._handlePageChange.bind(this);
+        this._checkData = this._checkData.bind(this);
         this.data = this.data.bind(this);
     }
 
@@ -76,16 +77,20 @@ export default class List extends React.Component {
         this._inUse = true;
     }
 
+    _checkData(data) {
+        if (Array.isArray(data) && this.props.showPagination && this.pagesCount == undefined) {
+            throw new Error('Got array of data and pagination was required but pagesCount is not set.');
+        }
+    }
+
     data(data) {
         //console.log('DataSet', data, typeof data);
         if (data == null || data == undefined) {
             return this.state;
         }
+        this._checkData(data);
         let update;
         if (Array.isArray(data)) {
-            if (this.props.showPagination && this.pagesCount == undefined) {
-                throw new Error('Got array of data and pagination was required but pagesCount is not set.');
-            }
             update = {
                 items: data,
                 count: data.length,
