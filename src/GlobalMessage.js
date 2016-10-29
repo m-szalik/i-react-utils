@@ -11,6 +11,7 @@ export default class GlobalMessage extends React.Component {
 
     constructor(props) {
         super();
+        this.props = props;
         this.messages = [];
         this.state = { messages : this.messages };
         this.message = this.message.bind(this);
@@ -109,9 +110,9 @@ export default class GlobalMessage extends React.Component {
         });
 
         return (
-            <div>
+            <div {...this.props}>
                 <div className="globalMessages">{messages}</div>
-                <div>{this.props.children}</div>
+                {this.props.children}
             </div>
         );
     }
