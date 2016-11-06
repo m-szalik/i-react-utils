@@ -2,7 +2,7 @@ import assert from "assert";
 import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from 'react-addons-test-utils';
-import {isNotBlank,isEmptyObject,setObjProperty,getObjProperty, isValidNIP, isValidREGON, isValidEmail} from '../src/utils';
+import {isNotBlank,isEmptyObject,setObjProperty,getObjProperty, isValidNIP, isValidREGON, isValidEmail, shallowCopy} from '../src/utils';
 
 
 describe("Utils - isNotBlank", function() {
@@ -89,5 +89,36 @@ describe("Utils - validators", function() {
     it("isValidEmail", () => {
         assert(! isValidEmail('somebody@somewhere.a'));
         assert(isValidEmail('somebody@somewhere.dot'));
+    });
+});
+
+describe("Utils - shallowCopy", function() {
+    this.timeout(100);
+
+    it("copy without except", () => {
+        let dst = {'my':'myVal'};
+        let res = shallowCopy(dst, {'a':'a', 'b':'bb'});
+        assert(res.my == 'myVal');
+        assert(res.a == 'a');
+        assert(res.b == 'bb');
+        assert(res === dst);
+    });
+
+    it("copy with except", () => {
+        let dst = {'my':'myVal'};
+        let res = shallowCopy(dst, {'a':'a', 'b':'bb'}, ['b']);
+        assert(res.my == 'myVal');
+        assert(res.a == 'a');
+        assert(res.b === undefined);
+        assert(res === dst);
+    });
+
+    it("copy src is null ", () => {
+        try {
+            shallowCopy({'my': 'myVal'}, null);
+            assert(false);
+        } catch (err) {
+            /* ignore */
+        }
     });
 });

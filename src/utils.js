@@ -1,3 +1,29 @@
+export function shallowCopy(dst, src, arrExcept) {
+    if (dst === undefined || dst === null) {
+        throw 'Destination (dst) is null or undefined - ' + dst;
+    }
+    if (src === undefined || src === null) {
+        throw 'Source (src) is null or undefined - ' + src;
+    }
+    for (var key in src) {
+        if (src.hasOwnProperty(key)) {
+            let exclude = false;
+            if (arrExcept) {
+                for (var i = 0; i < arrExcept.length; i++) {
+                    if (arrExcept[i] === key) {
+                        exclude = true;
+                        break;
+                    }
+                }
+            }
+            if (! exclude) {
+                dst[key] = src[key];
+            }
+        }
+    }
+    return dst;
+}
+
 export function isEmptyObject(obj) {
     if (obj == null || obj == undefined) {
         return true;
