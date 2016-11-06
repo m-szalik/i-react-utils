@@ -24,6 +24,20 @@ export class Breadcrumbs extends React.Component {
         this.state = {
             config : this.props.config ? this.props.config : null
         };
+        this.config = this.config.bind(this);
+        this.clear = this.clear.bind(this);
+    }
+
+    config(config) {
+        if (this.delegateMode) {
+            this.context.breadcrumbs.setState({config: config});
+        }
+    }
+
+    clear() {
+        if (this.delegateMode) {
+            this.context.breadcrumbs.setState({config: []});
+        }
     }
 
     getChildContext() {
@@ -42,7 +56,7 @@ export class Breadcrumbs extends React.Component {
             // do not render it
             return null;
         }
-        if (this.state.config == null) {
+        if (this.state.config == null || this.state.config.length == 0) {
             return (<div>{this.props.children}</div>);
         } else {
             const items = [];
