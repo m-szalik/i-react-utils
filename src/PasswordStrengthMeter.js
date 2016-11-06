@@ -62,7 +62,7 @@ export default class PasswordStrengthMeter extends React.Component {
         }
         return (
             <div {... this.props} className="password-strength-meter progress">
-                <div className={`progress-bar ${cl} password-strength-meter-bar`} style={{width: prc}}>${this.props.children}</div>
+                <div className={`progress-bar ${cl} password-strength-meter-bar`} style={{width: prc}}>{this.props.children}</div>
             </div>
         );
     }
