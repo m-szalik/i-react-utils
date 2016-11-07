@@ -35,6 +35,11 @@ export default class GlobalMessage extends React.Component {
             msg : msg,
             close() {
                 messenger.close(msgObj);
+            },
+            timeout(timeout) {
+                if (timeout > 0) {
+                    setTimeout(function() { messenger.close(msgObj);}, timeout);
+                }
             }
         };
         let newArray = this.messages.slice(0);
