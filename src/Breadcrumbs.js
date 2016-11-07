@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
-import {isEquivalent} from './utils'
+import {isEquivalent, shallowCopy} from './utils'
 
 export function bc(link, label) {
     return { link: link, label : label };
@@ -62,8 +62,9 @@ export class Breadcrumbs extends React.Component {
             // do not render it
             return null;
         }
+        const divProps = shallowCopy({}, this.props, ['config']);
         if (this.state.config == null || this.state.config.length == 0) {
-            return (<div>{this.props.children}</div>);
+            return (<div {...divProps}>{this.props.children}</div>);
         } else {
             const items = [];
             this.state.config.forEach((br, i) => {
@@ -74,7 +75,7 @@ export class Breadcrumbs extends React.Component {
                 }
             });
             return (
-                <div>
+                <div {...divProps}>
                     <div id="breadcrumb" className="row">
                         <ol className="breadcrumb">
                             <li><Link className="home" to="/"><span className="ico-panel ico-breadcrumb-home" aria-hidden="true"></span></Link></li>
