@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {shallowCopy} from './utils';
 
 export default class PasswordStrengthMeter extends React.Component {
     static propTypes = {
@@ -19,6 +19,11 @@ export default class PasswordStrengthMeter extends React.Component {
         this.state = { level : 0, length : 0 };
         this.props = props;
         this._calculate = this._calculate.bind(this);
+        this._prepare(props);
+    }
+
+    _prepare(props) {
+        this.divProps = shallowCopy({}, props, ['rules','password','strengthThreshold','minLength']);
     }
 
     _calculate(password) {
@@ -43,6 +48,7 @@ export default class PasswordStrengthMeter extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
+        this._prepare(nextProps);
         this._calculate(nextProps.password);
     }
 
@@ -61,7 +67,7 @@ export default class PasswordStrengthMeter extends React.Component {
             cl = 'progress-bar-success'
         }
         return (
-            <div {... this.props} className="password-strength-meter progress">
+            <div {... this.divProps} className="password-strength-meter progress">
                 <div className={`progress-bar ${cl} password-strength-meter-bar`} style={{width: prc}}>{this.props.children}</div>
             </div>
         );
