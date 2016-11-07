@@ -37,7 +37,7 @@ export class Breadcrumbs extends React.Component {
             bc = this;
         }
         let oldState = bc.state.config;
-        if (! isEquivalent(oldState, config)) {
+        if (oldState == null || ! isEquivalent(oldState, config)) {
             bc.setState({config: config});
         }
     }
