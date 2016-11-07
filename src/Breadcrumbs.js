@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
+import {isEquivalent} from './utils'
 
 export function bc(link, label) {
     return { link: link, label : label };
@@ -24,13 +25,20 @@ export class Breadcrumbs extends React.Component {
         this.state = {
             config : this.props.config ? this.props.config : null
         };
-        this.config = this.config.bind(this);
+        this.configuration = this.configuration.bind(this);
         this.clear = this.clear.bind(this);
     }
 
-    config(config) {
+    configuration(config) {
+        let bc;
         if (this.delegateMode) {
-            this.context.breadcrumbs.setState({config: config});
+            bc = this.context.breadcrumbs;
+        } else {
+            bc = this;
+        }
+        let oldState = bc.state.config;
+        if (! isEquivalent(oldState, config)) {
+            bc.setState({config: config});
         }
     }
 
@@ -40,14 +48,14 @@ export class Breadcrumbs extends React.Component {
         }
     }
 
+
     getChildContext() {
         return {breadcrumbs : this};
     }
 
     componentWillMount() {
-        this.delegateMode = this.context.breadcrumbs != undefined;
-        if (this.delegateMode) {
-            this.context.breadcrumbs.setState({config: this.state.config});
+        if (this.props.config) {
+            this.configuration(this.props.config);
         }
     }
 
