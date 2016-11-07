@@ -57,6 +57,13 @@ export class Breadcrumbs extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.debug("BCCCC", this.delegateMode, nextProps);
+        if (this.props.config) {
+            this.configuration(this.props.config);
+        }
+    }
+
     render() {
         if (this.delegateMode) {
             // do not render it

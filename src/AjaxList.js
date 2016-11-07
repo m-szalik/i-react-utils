@@ -37,21 +37,25 @@ export default class AjaxList extends List {
             this.setState({error:false});
         }
         let promise = this.props.fetchDataCallback(page);
-        promise.then((resp) => {
-                            if (Array.isArray(resp.data)) {
-                                this.pagesCount = page + 1;
-                            }
-                            this.data(resp.data);
-                        },
-                        (err) => {
-                            if (this.props.onError) {
-                                console.log("AjaxList: fetch rejected: ", err);
-                                this.props.onError(err);
-                            } else {
-                                console.error("AjaxList: fetch rejected: ", err);
-                            }
-                            this.setState({error:true});
-                        });
+        if (promise) {
+            promise.then((resp) => {
+                    if (Array.isArray(resp.data)) {
+                        this.pagesCount = page + 1;
+                    }
+                    this.data(resp.data);
+                },
+                (err) => {
+                    if (this.props.onError) {
+                        console.log("AjaxList: fetch rejected: ", err);
+                        this.props.onError(err);
+                    } else {
+                        console.error("AjaxList: fetch rejected: ", err);
+                    }
+                    this.setState({error: true});
+                });
+        } else {
+            this.data({"items":[],"paging":{"total":0,"page":1,"count":1}}); // empty list
+        }
     }
 
     componentDidMount() {
