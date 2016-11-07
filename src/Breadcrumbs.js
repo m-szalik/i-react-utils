@@ -43,9 +43,7 @@ export class Breadcrumbs extends React.Component {
     }
 
     clear() {
-        if (this.delegateMode) {
-            this.context.breadcrumbs.setState({config: []});
-        }
+        this.configuration([]);
     }
 
 
