@@ -47,7 +47,7 @@ export function createEqLengthFormValidator(eqLength, message) {
     return validator;
 }
 
-export function createRegexLengthFormValidator(regex, message) {
+export function createRegexFormValidator(regex, message) {
     if (typeof regex === 'string') {
         regex = new RegExp(regex, "i");
     }
