@@ -2,12 +2,31 @@
 
 module.exports.__esModule = true;
 
-var utils = require('./utils');
-var fw = require('./FormWizard');
+var utilsFactory = require('./utils');
+var fwFactory = require('./FormWizard');
 var bcFactory = require('./Breadcrumbs');
 
-module.exports = utils;
-module.exports.fw = fw;
+module.exports.shallowCopy = utilsFactory.shallowCopy;
+module.exports.isEquivalent = utilsFactory.isEquivalent;
+module.exports.isEmptyObject = utilsFactory.isEmptyObject;
+module.exports.isNotBlank = utilsFactory.isNotBlank;
+module.exports.setObjProperty = utilsFactory.setObjProperty;
+module.exports.getObjProperty = utilsFactory.getObjProperty;
+module.exports.isValidNIP = utilsFactory.isValidNIP;
+module.exports.isValidREGON = utilsFactory.isValidREGON;
+module.exports.isValidEmail = utilsFactory.isValidEmail;
+
+module.exports.fw = {
+    createFormValidator : fwFactory.createFormValidator,
+    createIsRequiredFormValidator : fwFactory.createIsRequiredFormValidator,
+    createMinLengthFormValidator : fwFactory.createMinLengthFormValidator,
+    createMaxLengthFormValidator : fwFactory.createMaxLengthFormValidator,
+    createEqLengthFormValidator : fwFactory.createEqLengthFormValidator,
+    createRegexFormValidator : fwFactory.createRegexFormValidator,
+    BootstrapWrapper : fwFactory.BootstrapWrapper,
+    Input : fwFactory.Input,
+    Form : fwFactory.Form
+};
 module.exports.GlobalMessage = require('./GlobalMessage');
 module.exports.Breadcrumbs = bcFactory.Breadcrumbs;
 module.exports.bc = bcFactory.bc;
