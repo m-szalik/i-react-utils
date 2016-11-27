@@ -30,12 +30,7 @@ export class Breadcrumbs extends React.Component {
     }
 
     configuration(config) {
-        let bc;
-        if (this.delegateMode) {
-            bc = this.context.breadcrumbs;
-        } else {
-            bc = this;
-        }
+        let bc = this.context.breadcrumbs ? this.context.breadcrumbs : this;
         let oldState = bc.state.config;
         if (oldState == null || ! isEquivalent(oldState, config)) {
             bc.setState({config: config});
@@ -64,7 +59,7 @@ export class Breadcrumbs extends React.Component {
     }
 
     render() {
-        if (this.delegateMode) {
+        if (this.context.breadcrumbs) {
             // do not render it
             return null;
         }
