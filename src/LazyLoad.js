@@ -1,4 +1,11 @@
 import React from 'react';
+import {shallowCopy} from './utils'
+
+function _subElementProps(source) {
+    let dst = {};
+    shallowCopy(dst, source, ['component', 'errorComponent', 'loadingComponent', 'ajax']);
+    return dst;
+}
 
 function _buildElement(compOrElem, props, children) {
     if (compOrElem) {
@@ -31,8 +38,8 @@ export default class LazyLoad extends React.Component {
         this.state = { element : null, loading : true };
         this._setup = this._setup.bind(this);
         this.reload = this.reload.bind(this);
-        this.loadingElement = _buildElement(props.loadingComponent, props, []);
-        this.mounted = false;
+        this.subElementProps = _subElementProps(props);
+        this.loadingElement = _buildElement(props.loadingComponent, this.subElementProps, []);
     }
 
     _setup(props) {
@@ -42,23 +49,21 @@ export default class LazyLoad extends React.Component {
         let promise = props.ajax();
         if (promise) {
             promise.then((res) => {
-                    if (this.mounted) {
-                        let data = res.data;
-                        const cProps = {...props, data: data};
-                        const element = _buildElement(props.component, cProps, props.children);
-                        this.setState({element: element, loading: false});
-                    }
+                    let data = res.data;
+                    const cProps = _subElementProps(props);
+                    cProps.data = data;
+                    const element = _buildElement(props.component, cProps, props.children);
+                    this.setState({element: element, loading: false});
                 })
                 .catch((err) => {
                     console.log('Unable to load resource via ajax for LazyLoad.', err);
-                    if (this.mounted) {
-                        if (props.errorComponent) {
-                            const cProps = {...props, data: err.response.data};
-                            const element = _buildElement(props.errorComponent, cProps, props.children);
-                            this.setState({element: element, loading: false});
-                        } else {
-                            this.setState({element: null, loading: false});
-                        }
+                    if (props.errorComponent) {
+                        const cProps = _subElementProps(props);
+                        cProps.data = err.response.data;
+                        const element = _buildElement(props.errorComponent, cProps, props.children);
+                        this.setState({element: element, loading: false});
+                    } else {
+                        this.setState({element: null, loading: false});
                     }
                 });
         } else {
@@ -72,17 +77,12 @@ export default class LazyLoad extends React.Component {
     }
 
     componentWillMount() {
-        this.mounted = true;
         this._setup(this.props);
-    }
-
-    componentWillUnmount() {
-        this.mounted = false;
     }
 
     componentWillReceiveProps(newProps) {
         if (this.props.loadingComponent != newProps.loadingComponent) {
-            this.loadingElement = _buildElement(newProps.loadingComponent, newProps, []);
+            this.loadingElement = _buildElement(newProps.loadingComponent, _subElementProps(newProps), []);
         }
         this.props = newProps;
     }
