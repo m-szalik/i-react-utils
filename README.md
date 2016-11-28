@@ -72,6 +72,27 @@ class Page extends React.Component {
 }
 ```
 
+### LazyLoad
+`import {GlobalMessage} from 'i-react-utils';`
+
+This component lazy loads and render components.
+
+```
+<LazyLoad
+            component={this.props.component}
+            errorComponent={this.props.errorComponent}
+            loadingComponent={<img src="/public/images/ajax-loader.gif" alt="..." />}
+            ajax={this.ajax.bind(this)}>
+</LazyLoad>
+```
+
+Where:
+ * **ajax** is a function that return Promise of ajax request.
+ * **component** = an React component or element to render when data is available.
+ * **errorComponent** = an React component or element to render when data is not available (optional).
+ * **loadingComponent** = an React component or element to render during ajax call (optional).
+
+
 ## Utils and helpers:
 
 `import {isEmptyObject, isNotBlank, setObjProperty, getObjProperty, isValidNIP, isValidREGON, isValidEmail} from 'i-react-utils';`

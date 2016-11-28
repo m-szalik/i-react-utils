@@ -33,6 +33,7 @@ module.exports.bc = bcFactory.bc;
 module.exports.List = require('./List');
 module.exports.AjaxList = require('./AjaxList');
 module.exports.PasswordStrengthMeter = require('./PasswordStrengthMeter');
+module.exports.LazyLoad = require('./LazyLoad');
 
 
 // Polyfills:
