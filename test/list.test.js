@@ -8,7 +8,7 @@ describe("List", function() {
   this.timeout(30000);
 
   it("Render list", () => {
-      var data = ['orange', 'blue', 'brown', 'red', 'yellow'];
+      const data = ['orange', 'blue', 'brown', 'red', 'yellow'];
       const componentDefinition = (<List data={data} renderRow={function(item,index,reactRowKey) {
         return (<tr key={reactRowKey}><td style={{"background":item}}>{item}</td></tr>);
       }}>

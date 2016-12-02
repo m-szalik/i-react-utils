@@ -339,7 +339,7 @@ export class Form extends React.Component {
 
     _handleOnSubmit(event) {
         event.preventDefault();
-        console.debug("Submit (Form)", event, this.formData);
+//          console.debug("Submit (Form)", event, this.formData);
         // validation
         let ret = true;
         this.formInputs.forEach((fin) => {
