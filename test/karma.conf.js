@@ -14,7 +14,6 @@ module.exports = function (karma) {
       'karma-firefox-launcher',
       'karma-chrome-launcher',
       'karma-mocha',
-      'karma-coveralls',
       'karma-coverage',
       'karma-sourcemap-loader',
       'karma-webpack',
@@ -60,14 +59,6 @@ module.exports = function (karma) {
             exclude: /(node_modules|lib|example)/,
             loader: 'babel-loader',
             test: /\.jsx?$/
-          }, {
-            exclude: /(node_modules|lib|example)/,
-            loader: 'regenerator-loader',
-            test: /\.jsx?$/
-          }, {
-            include: path.resolve('src'),
-            loader: 'isparta',
-            test: /\.jsx?$/
           }
         ]
       }
@@ -91,8 +82,6 @@ module.exports = function (karma) {
     options.browsers = ['Firefox'];
     //options.browsers = ['Chrome', 'Firefox'];
   }
-  if(process.env.COVERALLS_REPO_TOKEN) {
-    options.reporters.push('coveralls');
-  }
+
   karma.set(options);
 };
