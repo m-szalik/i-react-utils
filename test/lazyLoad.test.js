@@ -17,16 +17,41 @@ class ErrorComponent extends React.Component {
     }
 }
 
+function createTestComponent(promise) {
+    const componentDefinition = (<LazyLoad style={{color:'red'}} ajax={() => promise} component={SuccessComponent} errorComponent={ErrorComponent} loadingComponent={<span className="loading">loading</span>}>content</LazyLoad>);
+    return TestUtils.renderIntoDocument(componentDefinition);
+}
 
-describe("LazyLoad", function() {
+describe("LazyLoad - loading", function() {
     this.timeout(30000);
 
-    it("Render - loading", () => {
-        const promise = new Promise(function(resolve, reject) { });
-        const componentDefinition = (<LazyLoad style={{color:'red'}} ajax={() => promise} component={SuccessComponent} errorComponent={ErrorComponent} loadingComponent={<span className="loading">loading</span>}>content</LazyLoad>);
-        let component = TestUtils.renderIntoDocument(componentDefinition);
+    const component = createTestComponent(new Promise(function(resolve, reject) { }));
+    it("Render", () => {
         let span = TestUtils.scryRenderedDOMComponentsWithTag(component, 'span')[0];
-        assert(span.className == 'loading', "Loading is OK");
+        assert(span.className == 'loading', "Loading is " + span.className);
     });
+});
 
+describe("LazyLoad - success", function() {
+    this.timeout(30000);
+    let callback;
+    const component = createTestComponent(new Promise(function(resolve, reject) { callback = resolve; }));
+    callback({data:'AjaxSuccess'});
+    it("Render", () => {
+        let span = TestUtils.scryRenderedDOMComponentsWithTag(component, 'span')[0];
+        assert(span.className == 'success', "Success className is " + span.className);
+        assert(span.innerHTML == 'content', "Failure content is " + span.innerHTML);
+    });
+});
+
+describe("LazyLoad - failure", function() {
+    this.timeout(30000);
+    let callback;
+    const component = createTestComponent(new Promise(function(resolve, reject) { callback = reject; }));
+    callback({response: {data:'AjaxFail'}});
+    it("Render", () => {
+        let span = TestUtils.scryRenderedDOMComponentsWithTag(component, 'span')[0];
+        assert(span.className == 'error', "Failure className is " + span.className);
+        assert(span.innerHTML == 'content', "Failure content is " + span.innerHTML);
+    });
 });
