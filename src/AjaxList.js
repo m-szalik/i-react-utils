@@ -1,9 +1,12 @@
 import React, { PropTypes } from 'react';
 import List from './List';
 import {shallowCopy} from './utils';
+import {_buildElement} from './utils-internal';
+
+
 
 function copyProps(props) {
-    return shallowCopy({}, props, ['fetchDataCallback', 'onFetch', 'onSuccess', 'onError', 'renderRow', 'showPagination']);
+    return shallowCopy({}, props, ['fetchDataCallback', 'onFetch', 'onSuccess', 'onError', 'renderRow', 'showPagination', 'loadingComponent', 'errorComponent']);
 }
 
 export default class AjaxList extends List {
@@ -12,24 +15,39 @@ export default class AjaxList extends List {
         onFetch : React.PropTypes.func, // when data loading starts
         onError : React.PropTypes.func, // when data loading finishes with error
         onSuccess : React.PropTypes.func, // when data loading finishes with success
+        errorComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]),          // component function or element
+        loadingComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]),        // component function or element
         renderRow : React.PropTypes.func.isRequired,
         showPagination : React.PropTypes.bool // default true
     };
 
     static defaultProps = {
         showPagination : true,
-        className : "ajaxList row"
+        className : "ajaxList row",
+        errorComponent : (<div className="center-block ajaxList-error">An error occurred.</div>),
+        loadingComponent : (<div className="center-block ajaxList-loader"></div>)
     };
 
     constructor(props) {
         super(props);
+        this.props = props;
         this._fetchData = this._fetchData.bind(this);
         this._handlePageChange = this._handlePageChange.bind(this);
         this.updateAndResetPage = this.updateAndResetPage.bind(this);
         this.update = this.update.bind(this);
         this.currentPage = 1;
-        this.state = { items : null, error:false };
+        this.state = { items : null, error : null };
         this.htmlProps = copyProps(props);
+        this.loadingElement = _buildElement(props.loadingComponent, {}, []);
+    }
+
+    componentWillReceiveProps(newProps) {
+        super.componentWillReceiveProps(newProps);
+        if (this.props.loadingComponent != newProps.loadingComponent) {
+            this.loadingElement = _buildElement(newProps.loadingComponent, {}, []);
+        }
+        this.htmlProps = copyProps(newProps);
+        this.props = newProps;
     }
 
     _checkData(data) {
@@ -44,14 +62,13 @@ export default class AjaxList extends List {
             this.props.onFetch({ page : page });
         }
         if (withClear) {
-            this.setState({items: null, error:false});
+            this.setState({items: null, error:null});
         } else {
-            this.setState({error:false});
+            this.setState({error:null});
         }
         let promise = this.props.fetchDataCallback(page);
         if (promise) {
             promise.then((resp) => {
-                console.debug('My promise resp', resp);
                 if (Array.isArray(resp.data)) {
                     this.pagesCount = page + 1;
                 }
@@ -67,9 +84,9 @@ export default class AjaxList extends List {
                 } else {
                     console.error("AjaxList: fetch rejected: ", err);
                 }
-                this.setState({error: true});
+                const errorElement = _buildElement(props.loadingComponent, {error:err}, []);
+                this.setState({error: errorElement});
             });
-            console.debug('My promise ', promise);
         } else {
             this.data({"items":[],"paging":{"total":0,"page":1,"count":1}}); // empty list
         }
@@ -94,10 +111,10 @@ export default class AjaxList extends List {
 
     render() {
         if (this.state.items == null) {
-            if (! this.state.error) {
-                return (<div {...this.htmlProps}><div className="center-block ajaxList-loader"></div></div>);
+            if (this.state.error == null) {
+                return (<div {...this.htmlProps}>{this.loadingElement}</div>);
             } else {
-                return (<div {...this.htmlProps}>An error occurred.</div>);
+                return (<div {...this.htmlProps}>{this.state.error}</div>);
             }
         } else {
             return super.render();

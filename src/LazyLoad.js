@@ -1,5 +1,6 @@
 import React from 'react';
-import {shallowCopy} from './utils'
+import {shallowCopy} from './utils';
+import {_buildElement} from './utils-internal';
 
 function _subElementProps(source) {
     let dst = {};
@@ -7,24 +8,12 @@ function _subElementProps(source) {
     return dst;
 }
 
-function _buildElement(compOrElem, props, children) {
-    if (compOrElem) {
-        if (React.isValidElement(compOrElem)) {
-            return compOrElem;
-        } else {
-            return React.createElement(compOrElem, props, children);
-        }
-    } else {
-        return null;
-    }
-}
-
 export default class LazyLoad extends React.Component {
 
     static propTypes = {
         component : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]).isRequired,
-        errorComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]),
-        loadingComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]),
+        errorComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]),          // component function or element
+        loadingComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]),        // component function or element
         ajax : React.PropTypes.func.isRequired                                                                  // function that returns Ajax Promise
     };
 
