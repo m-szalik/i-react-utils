@@ -59,6 +59,10 @@ module.exports = function (karma) {
             exclude: /(node_modules|lib|example)/,
             loader: 'babel-loader',
             test: /\.jsx?$/
+          }, {
+            include: path.resolve('src'),
+            loader: 'isparta',
+            test: /\.jsx?$/
           }
         ]
       }

@@ -24,6 +24,7 @@
     "envify": "*",
     "es6-promise": "*",
     "expose-loader": "*",
+    "isparta-loader": "*",
     "karma": "*",
     "karma-browserstack-launcher": "*",
     "karma-chrome-launcher": "*",
