@@ -16,7 +16,12 @@ export class Breadcrumbs extends React.Component {
     };
 
     static propTypes = {
-        config : PropTypes.arrayOf(PropTypes.object)
+        config : PropTypes.arrayOf(PropTypes.shape({ link : PropTypes.string.isRequired, label : PropTypes.string.isRequired })),
+        renderHome : PropTypes.bool
+    };
+
+    static defaultProps = {
+        renderHome : false
     };
 
     constructor(props) {
@@ -63,11 +68,14 @@ export class Breadcrumbs extends React.Component {
             // do not render it
             return null;
         }
-        const divProps = shallowCopy({}, this.props, ['config']);
+        const divProps = shallowCopy({}, this.props, ['config', 'renderHome']);
         if (this.state.config == null || this.state.config.length == 0) {
             return (<div {...divProps}>{this.props.children}</div>);
         } else {
             const items = [];
+            if (this.props.renderHome) {
+                items.push(<li key="bc-home"><Link className="home" to="/"><span className="ico-panel ico-breadcrumb-home"></span></Link></li>);
+            }
             this.state.config.forEach((br, i) => {
                 if (i == this.state.config.length -1) {
                     items.push((<li key={`bc-item-${i}`} className="active"><span>{br.label}</span></li>));
@@ -77,9 +85,8 @@ export class Breadcrumbs extends React.Component {
             });
             return (
                 <div {...divProps}>
-                    <div id="breadcrumb" className="row">
+                    <div id="breadcrumb" className="breadcrumb">
                         <ol className="breadcrumb">
-                            <li><Link className="home" to="/"><span className="ico-panel ico-breadcrumb-home" aria-hidden="true"></span></Link></li>
                             {items}
                         </ol>
                     </div>
