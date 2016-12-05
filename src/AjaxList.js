@@ -6,7 +6,7 @@ import {_buildElement, devOnly} from './utils-internal';
 
 
 function copyProps(props) {
-    return shallowCopy({}, props, ['fetchDataCallback', 'onFetch', 'onSuccess', 'onError', 'renderRow', 'showPagination', 'loadingComponent', 'errorComponent']);
+    return shallowCopy({}, props, ['fetchDataCallback', 'onDataChanged', 'onFetch', 'onSuccess', 'onError', 'renderRow', 'showPagination', 'loadingComponent', 'errorComponent']);
 }
 
 export default class AjaxList extends List {
@@ -15,6 +15,7 @@ export default class AjaxList extends List {
         onFetch : React.PropTypes.func, // when data loading starts
         onError : React.PropTypes.func, // when data loading finishes with error
         onSuccess : React.PropTypes.func, // when data loading finishes with success
+        onDataChanged : React.PropTypes.func, // inherited from List
         errorComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]),          // component function or element
         loadingComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]),        // component function or element
         renderRow : React.PropTypes.func.isRequired,
