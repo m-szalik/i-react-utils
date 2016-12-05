@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallowCopy} from './utils';
-import {_buildElement} from './utils-internal';
+import {_buildElement, devOnly} from './utils-internal';
 
 function _subElementProps(source) {
     let dst = {};
@@ -45,7 +45,7 @@ export default class LazyLoad extends React.Component {
                     this.setState({element: element, loading: false});
                 })
                 .catch((err) => {
-                    console.log('Unable to load resource via ajax for LazyLoad.', err);
+                    devOnly(() => {console.log('Unable to load resource via ajax for LazyLoad.', err);});
                     if (props.errorComponent) {
                         const cProps = _subElementProps(props);
                         cProps.data = err.response.data;

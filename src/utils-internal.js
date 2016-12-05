@@ -17,3 +17,9 @@ export function _buildElement(compOrElem, props, children) {
         return null;
     }
 }
+
+export function devOnly(callback) {
+    if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+        callback();
+    }
+}

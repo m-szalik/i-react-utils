@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-
+import {devOnly} from './utils-internal';
 
 /**
  */
@@ -47,7 +47,7 @@ export default class GlobalMessage extends React.Component {
         if (this._inUse) {
             this.setState({messages: newArray});
         } else {
-            console.log("GlobalMessage: New message on an unmounted GlobalMessage Component:", "type=" + type, "message=" + msg);
+            devOnly(() => {console.log("GlobalMessage: New message on an unmounted GlobalMessage Component:", "type=" + type, "message=" + msg);});
         }
         this.messages = newArray;
         return msgObj;

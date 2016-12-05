@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import List from './List';
 import {shallowCopy} from './utils';
-import {_buildElement} from './utils-internal';
+import {_buildElement, devOnly} from './utils-internal';
 
 
 
@@ -78,11 +78,9 @@ export default class AjaxList extends List {
                 }
             },
             (err) => {
+                devOnly(() => {console.log("AjaxList: fetch rejected: ", err);});
                 if (this.props.onError) {
-                    console.log("AjaxList: fetch rejected: ", err);
                     this.props.onError(err);
-                } else {
-                    console.error("AjaxList: fetch rejected: ", err);
                 }
                 const errorElement = _buildElement(props.loadingComponent, {error:err}, []);
                 this.setState({error: errorElement});

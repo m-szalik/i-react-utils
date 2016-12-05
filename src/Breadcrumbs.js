@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
 import {isEquivalent, shallowCopy} from './utils'
+import {devOnly} from './utils-internal'
 
 export function bc(link, label) {
     return { link: link, label : label };
@@ -38,6 +39,7 @@ export class Breadcrumbs extends React.Component {
         let bc = this.context.breadcrumbs ? this.context.breadcrumbs : this;
         let oldState = bc.state.config;
         if (oldState == null || ! isEquivalent(oldState, config)) {
+            devOnly(()=>{console.debug('Updating breadcrumbs to', config);});
             bc.setState({config: config});
         }
     }

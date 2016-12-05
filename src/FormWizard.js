@@ -1,5 +1,6 @@
 import React from 'react';
 import {setObjProperty, getObjProperty, isNotBlank} from './utils';
+import {devOnly} from './utils-internal';
 
 export function createFormValidator(message, isValidFunction) {
     return {
@@ -339,15 +340,13 @@ export class Form extends React.Component {
 
     _handleOnSubmit(event) {
         event.preventDefault();
-//          console.debug("Submit (Form)", event, this.formData);
+        devOnly(() => {  console.debug("Submit (Form)", event, this.formData);  });
         // validation
         let ret = true;
         this.formInputs.forEach((fin) => {
             if (! fin.validate()) {
                 ret = false;
-                if (console.debug) {
-                    console.debug('Invalid field', fin);
-                }
+                devOnly(() => { console.debug('Invalid field', fin);  });
             }
         });
         if (ret) {
