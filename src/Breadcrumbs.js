@@ -39,7 +39,14 @@ export class Breadcrumbs extends React.Component {
         let bc = this.context.breadcrumbs ? this.context.breadcrumbs : this;
         let oldState = bc.state.config;
         if (oldState == null || ! isEquivalent(oldState, config)) {
-            devOnly(()=>{console.debug('Updating breadcrumbs to', config);});
+            devOnly(()=>{
+                let strArray;
+                if (config) {
+                    strArray = [];
+                    config.forEach((i) => { strArray.push(i.link);});
+                }
+                console.debug('Updating breadcrumbs to', strArray);
+            });
             bc.setState({config: config});
         }
     }
