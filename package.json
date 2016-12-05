@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "react": "^15.x.x",
-    "react-router": "^2.x.x"
+    "react-router": "2.x.x || 3.x.x"
   },
   "devDependencies": {
     "assert": "*",
@@ -43,7 +43,7 @@
   },
   "scripts": {
     "test": "./node_modules/karma/bin/karma start test/karma.conf.js",
-    "build": "./node_modules/babel-cli/bin/babel.js --plugins add-module-exports --out-dir ./lib --no-comments --compact true --minified ./src/",
+    "build": "./node_modules/babel-cli/bin/babel.js --plugins add-module-exports --out-dir ./lib  ./src/",
     "start": "node ./example/server.js"
   },
   "repository": {
