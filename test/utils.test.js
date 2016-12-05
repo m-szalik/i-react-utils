@@ -2,7 +2,7 @@ import assert from "assert";
 import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from 'react-addons-test-utils';
-import {isNotBlank,isEmptyObject,setObjProperty,getObjProperty, isValidNIP, isValidREGON, isValidEmail, shallowCopy} from '../src/utils';
+import {isNotBlank,isEmptyObject,setObjProperty,getObjProperty, isValidNIP, isValidREGON, isValidEmail, shallowCopy, isEquivalent} from '../src/utils';
 
 
 describe("Utils - isNotBlank", function() {
@@ -121,4 +121,57 @@ describe("Utils - shallowCopy", function() {
             /* ignore */
         }
     });
+});
+
+describe("Utils - isEquivalent", function() {
+    this.timeout(20);
+
+    it("Numbers equal", () => {
+        assert(isEquivalent(10, 10), "10!=10");
+    });
+
+    it("Numbers not equal", () => {
+        assert(! isEquivalent(10, 62), "10==62");
+    });
+
+    it("Strings equal", () => {
+        assert(isEquivalent('ABC', 'ABC'), "ABC!=ABC");
+    });
+
+    it("Strings not equal", () => {
+        assert(! isEquivalent('ABC', 'XY'), "ABC==XY");
+    });
+
+    it("Arrays equal", () => {
+        assert(isEquivalent([1,2,3], [1,2,3]), "[1,2,3]!=[1,2,3]");
+    });
+
+    it("Arrays not equal (1)", () => {
+        assert(! isEquivalent([1,2,3], [1,9,3]), "[1,2,3]==[1,9,3]");
+    });
+
+    it("Arrays not equal (2)", () => {
+        assert(! isEquivalent([1,2,3], [1,3,3]), "[1,2,3]==[1,3,2]");
+    });
+
+    it("Arrays not equal (3)", () => {
+        assert(! isEquivalent([1,2,3], [1,2,3,4]), "[1,2,3]==[12,3,4]");
+    });
+
+    it("Objects equal", () => {
+        assert(isEquivalent({x:1,y:{a:5}}, {x:1,y:{a:5}}), "objects should be equal");
+    });
+
+    it("Objects not equal", () => {
+        assert(! isEquivalent({x:1,y:{a:5}}, {x:1,y:{a:null}}), "objects should be not equal");
+    });
+
+    it("Mixed: undefined != null", () => {
+        assert(! isEquivalent(undefined, null), "undefined==null");
+    });
+
+    it("Mixed: '3' != 3", () => {
+        assert(! isEquivalent('3', 3), "'3'==3");
+    });
+
 });

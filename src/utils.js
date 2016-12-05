@@ -24,19 +24,36 @@ export function shallowCopy(dst, src, arrExcept) {
     return dst;
 }
 
+/**
+ * If arguments are equal
+ * (hint: null != undefined)
+ */
 export function isEquivalent(a, b) {
-    var aProps = Object.getOwnPropertyNames(a);
-    var bProps = Object.getOwnPropertyNames(b);
-    if (aProps.length != bProps.length) {
+    if (a === b) {
+        return true;
+    }
+    if ((a == undefined && b != undefined) || (a != undefined && b == undefined)) {
         return false;
     }
-    for (var i = 0; i < aProps.length; i++) {
-        var propName = aProps[i];
-        if (a[propName] !== b[propName]) {
-            return false;
+    if (typeof a == typeof b) {
+        if (typeof a == 'object') {
+            let aProps = Object.getOwnPropertyNames(a);
+            let bProps = Object.getOwnPropertyNames(b);
+            if (aProps.length != bProps.length) {
+                return false;
+            }
+            for (var i = 0; i < aProps.length; i++) {
+                let propName = aProps[i];
+                if (!isEquivalent(a[propName], b[propName])) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return a == b;
         }
     }
-    return true;
+    return false;
 }
 
 export function isEmptyObject(obj) {
