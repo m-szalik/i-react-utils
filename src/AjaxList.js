@@ -6,7 +6,7 @@ import {_buildElement, devOnly} from './utils-internal';
 
 
 function copyProps(props) {
-    return shallowCopy({}, props, ['fetchDataCallback', 'onFetch', 'onSuccess', 'onError', 'renderRow', 'showPagination', 'loadingComponent', 'errorComponent']);
+    return shallowCopy({}, props, ['fetchDataCallback', 'onFetch', 'onSuccess', 'onError', 'renderRow', 'showPagination', 'loadingComponent', 'errorComponent', 'noDataComponent', 'headerAlwaysOn']);
 }
 
 export default class AjaxList extends React.Component {
@@ -19,13 +19,16 @@ export default class AjaxList extends React.Component {
         onSuccess : React.PropTypes.func, // when data loading finishes with success, function(event)
         errorComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]),          // component function or element
         loadingComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]),        // component function or element
+        noDataComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ]),         // component function or element
         renderRow : React.PropTypes.func.isRequired,
-        showPagination : React.PropTypes.bool // default true
+        showPagination : React.PropTypes.bool, // Default true
+        headerAlwaysOn : React.PropTypes.bool  // if show header and footer when no data is available. Default: true
     };
 
     static defaultProps = {
         id : "ajaxList-" + (Math.random() * 10000),
         showPagination : true,
+        headerAlwaysOn : true,
         className : "ajaxList row",
         errorComponent : (<div className="center-block ajaxList-error">An error occurred.</div>),
         loadingComponent : (<div className="center-block ajaxList-loader"></div>)
@@ -40,17 +43,20 @@ export default class AjaxList extends React.Component {
         this.updateAndResetPage = this.updateAndResetPage.bind(this);
         this.update = this.update.bind(this);
         this.currentPage = 1;
-        this.state = { items : null, error : null };
         this.htmlProps = copyProps(props);
-        this.loadingElement = _buildElement(props.loadingComponent, {}, []);
-        this.state = {"items":[],"paging":{"total":0,"page":1,"count":1}};
+        this.loadingElement = _buildElement(props.loadingComponent, this.htmlProps, []);
+        this.noDataElement = _buildElement(props.noDataComponent, this.htmlProps, []);
+        this.state = {"items":null,"paging":{"total":0,"page":1,"count":1}, error:null};
     }
 
     componentWillReceiveProps(newProps) {
-        if (this.props.loadingComponent != newProps.loadingComponent) {
-            this.loadingElement = _buildElement(newProps.loadingComponent, {}, []);
-        }
         this.htmlProps = copyProps(newProps);
+        if (this.props.loadingComponent != newProps.loadingComponent) {
+            this.loadingElement = _buildElement(newProps.loadingComponent, this.htmlProps, []);
+        }
+        if (this.props.noDataComponent != newProps.noDataComponent) {
+            this.noDataElement = _buildElement(newProps.noDataComponent, this.htmlProps, []);
+        }
         this.props = newProps;
     }
 
@@ -90,7 +96,8 @@ export default class AjaxList extends React.Component {
                 if (this.props.onError) {
                     this.props.onError(err);
                 }
-                const errorElement = _buildElement(this.props.errorComponent, {error:err}, []);
+                const errCompProps = {...this.htmlProps, error : err};
+                const errorElement = _buildElement(this.props.errorComponent, errCompProps, []);
                 this.setState({error: errorElement});
             });
         } else {
@@ -116,27 +123,26 @@ export default class AjaxList extends React.Component {
 
     render() {
         const {paging, items, error} = this.state;
+        let noDataElem;
         if (items == null) {
-            if (error == null) {
-                return (<div id={this.id} {...this.htmlProps}>{this.loadingElement}</div>);
-            } else {
-                return (<div id={this.id} {...this.htmlProps}>{error}</div>);
-            }
+            noDataElem = this.loadingElement;
         } else {
-            return (
-                <div id={this.id} {...this.htmlProps}>
-                    <SimpleListTable id={this.id} renderRow={this.props.renderRow} data={items}>
-                        {this.props.children}
-                    </SimpleListTable>
-                    {(() => {
-                        if (this.props.showPagination) {
-                            return (<ListPagination onPageChanged={this._handlePageChange} id={this.id} total={paging.total} count={paging.count} page={paging.page}/>);
-                        } else {
-                            return null;
-                        }
-                    })()}
-                </div>
-            );
+            noDataElem = error ? error : this.noDataElement;
         }
+        const indexOffset = Math.max(0, paging.page -1) * paging.count;
+        return (
+            <div id={this.id} {...this.htmlProps}>
+                <SimpleListTable id={this.id} renderRow={this.props.renderRow} data={items} headerAlwaysOn={this.props.headerAlwaysOn} noDataElement={noDataElem} indexOffset={indexOffset}>
+                    {this.props.children}
+                </SimpleListTable>
+                {(() => {
+                    if (this.props.showPagination) {
+                        return (<ListPagination onPageChanged={this._handlePageChange} id={this.id} total={paging.total} count={paging.count} page={paging.page}/>);
+                    } else {
+                        return null;
+                    }
+                })()}
+            </div>
+        );
     }
 }

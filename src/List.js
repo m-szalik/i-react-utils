@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import {isEquivalent, shallowCopy} from './utils';
-import {devOnly} from './utils-internal';
+import {devOnly, _buildElement} from './utils-internal';
 
 export class ListPagination extends React.Component {
     static propTypes = {
@@ -56,6 +56,8 @@ export class SimpleListTable extends React.Component {
         id: React.PropTypes.string.isRequired,
         data: React.PropTypes.any, // object with property items or an array
         renderRow: React.PropTypes.func.isRequired,
+        headerAlwaysOn: React.PropTypes.bool.isRequired,
+        noDataElement : React.PropTypes.element, // react element
         indexOffset : React.PropTypes.number
     };
 
@@ -85,11 +87,13 @@ export class SimpleListTable extends React.Component {
 
     render() {
         const {data} = this.state;
+        const hasData = data && data.length > 0;
+        const showHeaders = hasData || this.props.headerAlwaysOn;
         return (
             <table className={`table ${this.props.className}`} style={{width:'100%'}} id={this.id + "-table"}>
-                {this.parts.thead}
+                {showHeaders ? this.parts.thead : null}
                 {(() => {
-                    if (data) {
+                    if (hasData) {
                         const rows = [];
                         data.forEach((item, index) => {
                             const realIndex = this.props.indexOffset + index;
@@ -105,10 +109,14 @@ export class SimpleListTable extends React.Component {
                         });
                         return (<tbody>{rows}</tbody>);
                     } else {
-                        return null;
+                        if (this.props.noDataElement) {
+                            return (<tbody><tr><td colSpan="100%">{this.props.noDataElement}</td></tr></tbody>);
+                        } else {
+                            return null;
+                        }
                     }
                 })()}
-                {this.parts.tfoot}
+                {showHeaders ? this.parts.tfoot : null}
             </table>
         );
     }
@@ -136,7 +144,7 @@ export class SimpleListTable extends React.Component {
 }
 
 function copyProps(props) {
-    return shallowCopy({}, props, ['data', 'count', 'renderRow', 'showPagination', 'onPageChanged', 'prepareDataForPage']);
+    return shallowCopy({}, props, ['data', 'count', 'renderRow', 'showPagination', 'onPageChanged', 'prepareDataForPage', 'noDataComponent', 'headerAlwaysOn']);
 }
 
 
@@ -145,14 +153,18 @@ export class List extends React.Component {
         id : React.PropTypes.string, // list id
         data : React.PropTypes.array, // data array (all available data)
         renderRow : React.PropTypes.func.isRequired, // function(item,index,key) : tr element
-        count : React.PropTypes.number.isRequired, // number of items per page
+        count : React.PropTypes.number, // number of items per page
         onPageChanged : React.PropTypes.func,  // callback function(page) : void (page is 1-indexed)
         prepareDataForPage : React.PropTypes.func, // function(data,page,count) : array of data (page is 1-indexed)
-        showPagination : React.PropTypes.bool // default false
+        showPagination : React.PropTypes.bool, // Default: true
+        headerAlwaysOn : React.PropTypes.bool,  // if show header and footer when no data is available. Default: true
+        noDataComponent : React.PropTypes.oneOfType([ React.PropTypes.func, React.PropTypes.element ])  // component function or element
     };
 
     static defaultProps = {
         showPagination : true,
+        headerAlwaysOn : true,
+        count : 10,
         id : "list-" + (Math.random() * 10000),
         prepareDataForPage : function(data,page,count) {
             return data.slice((page -1)*count, page*count);
@@ -170,12 +182,16 @@ export class List extends React.Component {
         this._data = this._data.bind(this);
         this.props = props;
         this.htmlProps = copyProps(props);
+        this.noDataElement = _buildElement(props.noDataComponent, this.htmlProps, []);
     }
 
     componentWillReceiveProps(nextProps) {
         const updateData = ! isEquivalent(this.props.data, nextProps.data);
-        this.props = nextProps;
         this.htmlProps = copyProps(nextProps);
+        if (this.props.noDataComponent != nextProps.noDataComponent) {
+            this.noDataElement = _buildElement(nextProps.noDataComponent, this.htmlProps, []);
+        }
+        this.props = nextProps;
         if (updateData) {
             this._data(nextProps.data, true);
         }
@@ -212,7 +228,8 @@ export class List extends React.Component {
         const {items, total, page} = this.state;
         return (
             <div {...this.htmlProps} key={this.id}>
-                <SimpleListTable id={this.props.id} renderRow={this.props.renderRow} data={items} indexOffset={(page -1) * this.props.count}>
+                <SimpleListTable id={this.props.id} renderRow={this.props.renderRow} data={items} indexOffset={(page -1) * this.props.count}
+                                 headerAlwaysOn={this.props.headerAlwaysOn} noDataElement={this.noDataElement}>
                     {this.props.children}
                 </SimpleListTable>
                 {(() => {
