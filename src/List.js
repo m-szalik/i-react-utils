@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import {isEquivalent, shallowCopy} from './utils';
+import {isEquivalent, shallowCopyExcept} from './utils';
 import {devOnly, _buildElement} from './utils-internal';
 
 export class ListPagination extends React.Component {
@@ -144,7 +144,7 @@ export class SimpleListTable extends React.Component {
 }
 
 function copyProps(props) {
-    return shallowCopy({}, props, ['data', 'count', 'renderRow', 'showPagination', 'onPageChanged', 'prepareDataForPage', 'noDataComponent', 'headerAlwaysOn']);
+    return shallowCopyExcept({}, props, ['data', 'count', 'renderRow', 'showPagination', 'onPageChanged', 'prepareDataForPage', 'noDataComponent', 'headerAlwaysOn']);
 }
 
 

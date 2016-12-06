@@ -1,10 +1,10 @@
 import React from 'react';
-import {shallowCopy} from './utils';
+import {shallowCopyExcept} from './utils';
 import {_buildElement, devOnly} from './utils-internal';
 
 function _subElementProps(source) {
     let dst = {};
-    shallowCopy(dst, source, ['component', 'errorComponent', 'loadingComponent', 'ajax']);
+    shallowCopyExcept(dst, source, ['component', 'errorComponent', 'loadingComponent', 'ajax']);
     return dst;
 }
 

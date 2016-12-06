@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallowCopy} from './utils';
+import {shallowCopyExcept} from './utils';
 
 export default class PasswordStrengthMeter extends React.Component {
     static propTypes = {
@@ -23,7 +23,7 @@ export default class PasswordStrengthMeter extends React.Component {
     }
 
     _prepare(props) {
-        this.divProps = shallowCopy({}, props, ['rules','password','strengthThreshold','minLength']);
+        this.divProps = shallowCopyExcept({}, props, ['rules','password','strengthThreshold','minLength']);
     }
 
     _calculate(password) {

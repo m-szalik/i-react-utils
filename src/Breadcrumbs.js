@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
-import {isEquivalent, shallowCopy} from './utils'
+import {isEquivalent, shallowCopyExcept} from './utils'
 import {devOnly} from './utils-internal'
 
 export function bc(link, label) {
@@ -77,7 +77,7 @@ export class Breadcrumbs extends React.Component {
             // do not render it
             return null;
         }
-        const divProps = shallowCopy({}, this.props, ['config', 'renderHome']);
+        const divProps = shallowCopyExcept({}, this.props, ['config', 'renderHome']);
         if (this.state.config == null || this.state.config.length == 0) {
             return (<div {...divProps}>{this.props.children}</div>);
         } else {

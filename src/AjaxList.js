@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import List, {SimpleListTable, ListPagination} from './List';
-import {shallowCopy} from './utils';
+import {shallowCopyExcept} from './utils';
 import {_buildElement, devOnly} from './utils-internal';
 
 
 
 function copyProps(props) {
-    return shallowCopy({}, props, ['fetchDataCallback', 'onFetch', 'onSuccess', 'onError', 'renderRow', 'showPagination', 'loadingComponent', 'errorComponent', 'noDataComponent', 'headerAlwaysOn']);
+    return shallowCopyExcept({}, props, ['fetchDataCallback', 'onFetch', 'onSuccess', 'onError', 'renderRow', 'showPagination', 'loadingComponent', 'errorComponent', 'noDataComponent', 'headerAlwaysOn']);
 }
 
 export default class AjaxList extends React.Component {

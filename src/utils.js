@@ -1,28 +1,52 @@
-export function shallowCopy(dst, src, arrExcept) {
+/**
+ * Copy properties from src to dst
+ * @param dst
+ * @param src
+ * @param acceptFunction = function(key, srcVal) decide if copy that key || array of keys to copy || undefined == copy all
+ * @returns dst
+ */
+export function shallowCopy(dst, src, acceptFunction) {
     if (dst === undefined || dst === null) {
         throw 'Destination (dst) is null or undefined - ' + dst;
     }
     if (src === undefined || src === null) {
         throw 'Source (src) is null or undefined - ' + src;
     }
+    if (Array.isArray(acceptFunction)) {
+        const accept = acceptFunction;
+        acceptFunction = function(key, srcVal) {
+            return accept.indexOf(key) > -1;
+        };
+    }
+
     for (var key in src) {
         if (src.hasOwnProperty(key)) {
-            let exclude = false;
-            if (arrExcept) {
-                for (var i = 0; i < arrExcept.length; i++) {
-                    if (arrExcept[i] === key) {
-                        exclude = true;
-                        break;
-                    }
-                }
-            }
-            if (! exclude) {
-                dst[key] = src[key];
+            let sourceVal =  src[key];
+            if (acceptFunction === undefined || acceptFunction(key, sourceVal)) {
+                dst[key] = sourceVal;
             }
         }
     }
     return dst;
 }
+
+/**
+ * Copy all properties from src to dst except those listed in arrExcept
+ * @param dst
+ * @param src
+ * @param arrExcept - list of keys to omit.
+ * @returns dst
+ */
+export function shallowCopyExcept(dst, src, arrExcept) {
+    let accFunc;
+    if (arrExcept) {
+        accFunc = function(key, srcVal) {
+            return arrExcept.indexOf(key) == -1;
+        };
+    }
+    return shallowCopy(dst, src, accFunc);
+}
+
 
 /**
  * If arguments are equal
