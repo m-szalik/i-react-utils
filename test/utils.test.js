@@ -204,7 +204,7 @@ describe("Utils - isEquivalent", function() {
         assert(! isEquivalent(undefined, null), "undefined==null");
     });
 
-    it("Mixed: '3' != 3", () => {
+    it("Mixed types: '3' != 3", () => {
         assert(! isEquivalent('3', 3), "'3'==3");
     });
 
