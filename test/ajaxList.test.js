@@ -5,7 +5,7 @@ import TestUtils from 'react-addons-test-utils';
 import AjaxList from '../src/AjaxList';
 
 describe("AjaxList", function() {
-    this.timeout(30000);
+    this.timeout(3000);
     const responseData = {"items":['orange', 'blue', 'brown', 'red', 'yellow'],"paging":{"total":0,"page":1,"count":1}};
 
     const renderRow = function(item,index,reactRowKey) {

@@ -6,11 +6,13 @@ import GlobalMessage from '../src/GlobalMessage';
 
 
 describe("GlobalMessage", function() {
-  this.timeout(30000);
+    this.timeout(3000);
 
-  it("Render GlobalMessage", () => {
-      const componentDefinition = (<GlobalMessage><span>Some text here</span></GlobalMessage>);
-      const component = TestUtils.renderIntoDocument(componentDefinition);
-  });
+    const component = TestUtils.renderIntoDocument(<GlobalMessage><span>Some text here</span></GlobalMessage>);
+
+    it("Render: empty", () => {
+        const gm = TestUtils.findRenderedDOMComponentWithClass(component, 'globalMessages');
+        assert(gm.innerHTML == '', 'Are there some messages there?');
+    });
 
 });

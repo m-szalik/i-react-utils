@@ -23,22 +23,22 @@ function createTestComponent(promise) {
 }
 
 describe("LazyLoad - loading", function() {
-    this.timeout(30000);
+    this.timeout(3000);
 
     const component = createTestComponent(new Promise(function(resolve, reject) { }));
     it("Render", () => {
-        let span = TestUtils.scryRenderedDOMComponentsWithTag(component, 'span')[0];
+        let span = TestUtils.findRenderedDOMComponentWithTag(component, 'span');
         assert(span.className == 'loading', "Loading is " + span.className);
     });
 });
 
 describe("LazyLoad - success", function() {
-    this.timeout(30000);
+    this.timeout(3000);
     let callback;
     const component = createTestComponent(new Promise(function(resolve, reject) { callback = resolve; }));
     callback({data:'AjaxSuccess'});
     it("Render", () => {
-        let span = TestUtils.scryRenderedDOMComponentsWithTag(component, 'span')[0];
+        let span = TestUtils.findRenderedDOMComponentWithTag(component, 'span');
         assert(span.className == 'success', "Success className is " + span.className);
         assert(span.innerHTML == 'content', "Failure content is " + span.innerHTML);
     });
@@ -50,7 +50,7 @@ describe("LazyLoad - failure", function() {
     const component = createTestComponent(new Promise(function(resolve, reject) { callback = reject; }));
     callback({response: {data:'AjaxFail'}});
     it("Render", () => {
-        let span = TestUtils.scryRenderedDOMComponentsWithTag(component, 'span')[0];
+        let span = TestUtils.findRenderedDOMComponentWithTag(component, 'span');
         assert(span.className == 'error', "Failure className is " + span.className);
         assert(span.innerHTML == 'content', "Failure content is " + span.innerHTML);
     });

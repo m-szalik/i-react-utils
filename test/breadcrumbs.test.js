@@ -6,7 +6,7 @@ import {Breadcrumbs, bc} from '../src/Breadcrumbs';
 
 
 describe("Breadcrumbs", function() {
-  this.timeout(30000);
+    this.timeout(3000);
 
     const componentDefinition = (<Breadcrumbs className="mainBC" renderHome={true}>
         <h1>Header</h1>

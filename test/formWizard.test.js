@@ -6,7 +6,7 @@ import * as fw from '../src/FormWizard';
 
 
 describe("Form Wizard", function() {
-  this.timeout(30000);
+  this.timeout(3000);
 
   it("Basic form.", () => {
       var data = null;
