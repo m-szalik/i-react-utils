@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import List, {SimpleListTable, ListPagination} from './List';
+import {SimpleListTable, ListPagination} from './ListComponents';
 import {shallowCopyExcept} from './utils';
 import {_buildElement, devOnly} from './utils-internal';
 

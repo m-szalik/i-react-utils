@@ -2,7 +2,7 @@ import assert from "assert";
 import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from 'react-addons-test-utils';
-import {List} from '../src/List';
+import List from '../src/List';
 
 
 describe("List", function() {
