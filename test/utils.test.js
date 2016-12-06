@@ -123,6 +123,40 @@ describe("Utils - shallowCopyExcept", function() {
     });
 });
 
+describe("Utils - shallowCopy", function() {
+    this.timeout(100);
+
+    it("copy without accept function", () => {
+        let dst = {'my':'myVal'};
+        let res = shallowCopy(dst, {'a':'a', 'b':'bb'});
+        assert(res.my == 'myVal');
+        assert(res.a == 'a');
+        assert(res.b == 'bb');
+        assert(res === dst);
+    });
+
+    it("copy + accept function", () => {
+        let dst = {'my':'myVal'};
+        let res = shallowCopy(dst, {'aa':'a', 'b':'bb', cc:'cc'}, (key, sval) => key.length == 2);
+        assert(res.my == 'myVal');
+        assert(res.aa == 'a');
+        assert(res.cc === 'cc');
+        assert(res.b === undefined);
+        assert(res === dst);
+    });
+
+    it("copy + keys array", () => {
+        let dst = {'my':'myVal'};
+        let res = shallowCopy(dst, {'aa':'a', 'b':'bb', cc:'cc'}, ['aa', 'cc']);
+        assert(res.my == 'myVal');
+        assert(res.aa == 'a');
+        assert(res.cc === 'cc');
+        assert(res.b === undefined);
+        assert(res === dst);
+    });
+
+});
+
 describe("Utils - isEquivalent", function() {
     this.timeout(20);
 
