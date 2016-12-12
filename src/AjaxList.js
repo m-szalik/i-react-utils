@@ -42,6 +42,7 @@ export default class AjaxList extends React.Component {
         this._handlePageChange = this._handlePageChange.bind(this);
         this.updateAndResetPage = this.updateAndResetPage.bind(this);
         this.update = this.update.bind(this);
+        this.mounted = false;
         this.currentPage = 1;
         this.htmlProps = copyProps(props);
         this.loadingElement = _buildElement(props.loadingComponent, this.htmlProps, []);
@@ -79,13 +80,15 @@ export default class AjaxList extends React.Component {
         let promise = this.props.fetchDataCallback(page);
         if (promise) {
             promise.then((resp) => {
-                if (Array.isArray(resp.data)) {
-                    let page = this.state.paging.page +1;
-                    const np = {... this.state.paging};
-                    np.page = page;
-                    this.setState({ items : resp.data, paging : np });
-                } else {
-                    this.setState(resp.data);
+                if (this.mounted) {
+                    if (Array.isArray(resp.data)) {
+                        let page = this.state.paging.page + 1;
+                        const np = {... this.state.paging};
+                        np.page = page;
+                        this.setState({items: resp.data, paging: np});
+                    } else {
+                        this.setState(resp.data);
+                    }
                 }
                 if (this.props.onSuccess) {
                     this.props.onSuccess({ page : page, data : resp.data });
@@ -96,17 +99,27 @@ export default class AjaxList extends React.Component {
                 if (this.props.onError) {
                     this.props.onError(err);
                 }
-                const errCompProps = {...this.htmlProps, error : err};
-                const errorElement = _buildElement(this.props.errorComponent, errCompProps, []);
-                this.setState({error: errorElement});
+                if (this.mounted) {
+                    const errCompProps = {...this.htmlProps, error: err};
+                    const errorElement = _buildElement(this.props.errorComponent, errCompProps, []);
+                    this.setState({error: errorElement});
+                }
             });
         } else {
             this.setState({"items":[],"paging":{"total":0,"page":1,"count":1}}); // empty list
         }
     }
 
+    componentWillMount() {
+        this.mounted = true;
+    }
+
     componentDidMount() {
         this._fetchData(1, false);
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     _handlePageChange(pg) {
