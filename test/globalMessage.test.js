@@ -49,3 +49,38 @@ test("Render: message timeout", () => {
     });
     return promise;
 });
+
+test("Integration", () => {
+    class TestComponent extends React.Component {
+        static contextTypes = {
+            messenger: React.PropTypes.object
+        };
+        handleClick() {
+            const messenger = this.context.messenger;
+            messenger.clear();
+            messenger.success('success message');
+            messenger.info('info message');
+            messenger.warning('warning message 0');
+            messenger.error('error message 0');
+            const m0 = messenger.warn('warning message 1');
+            const m1 = messenger.danger('error message 1');
+            messenger.close(m0);
+            messenger.close(m1);
+        }
+        render() { return <button onClick={this.handleClick.bind(this)}>click me</button>; }
+    }
+
+    const comp = TestUtils.renderIntoDocument(<GlobalMessage><span>Some text here</span><TestComponent/></GlobalMessage>);
+    const button = TestUtils.findRenderedDOMComponentWithTag(comp, 'button');
+    TestUtils.Simulate.click(button);
+
+    const promise = new Promise(function(resolve, reject) {
+        setTimeout(resolve, 50);
+    });
+    promise.then(() => {
+        const domMessages = TestUtils.scryRenderedDOMComponentsWithClass(comp, 'alert');
+        assert(domMessages.length == 4, 'Invalid number of messages (should be zero). => ' + domMessages.length);
+    });
+    return promise;
+});
+
