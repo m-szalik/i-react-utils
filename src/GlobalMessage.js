@@ -54,9 +54,9 @@ export default class GlobalMessage extends React.Component {
     }
 
     close(message) {
-        let index = this.state.messages.indexOf(message);
+        let index = this.messages.indexOf(message);
         if (index > -1) {
-            let newArray = this.state.messages.slice(0);
+            let newArray = this.messages.slice(0);
             newArray.splice(index, 1);
             if (this._inUse) {
                 this.setState({messages: newArray});
