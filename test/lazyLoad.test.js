@@ -35,3 +35,24 @@ test("Render - success", () => {
         assert(dom.props.data == 'AjaxSuccess', "Invalid data");
     });
 });
+
+test("Render - failure", () => {
+    const shallowRenderer = TestUtils.createRenderer();
+    let callback;
+    const promise = new Promise(function(resolve, reject) { callback = reject; });
+    const component = createTestComponent(function() { return promise; });
+    let dom = shallowRenderer.render(component);
+    const className = dom.props.className;
+    assert(className == 'loading', "ClassName is " + className + " but should be loading");
+    callback({response:{data:'AjaxFailure'}});
+
+    // wait for React
+    const p = new Promise(function(resolve, reject) {
+        setTimeout(resolve, 100);
+    });
+    p.then(() => {
+        let dom = shallowRenderer.render(component);
+        assert(dom.props.data == 'AjaxFailure', "Invalid data");
+    });
+    return p;
+});

@@ -25,3 +25,27 @@ test("Render: message success & clear", () => {
     domMessages = TestUtils.scryRenderedDOMComponentsWithClass(comp, 'alert');
     assert(domMessages.length == 0, 'Invalid number of messages (should be zero). => ' + domMessages.length);
 });
+
+test("Render: message close", () => {
+    const comp = TestUtils.renderIntoDocument(<GlobalMessage><span>Some text here</span></GlobalMessage>);
+    const msg = comp.message('success', 'A success message');
+    msg.close();
+    const domMessages = TestUtils.scryRenderedDOMComponentsWithClass(comp, 'alert');
+    assert(domMessages.length == 0, 'Invalid number of messages (should be zero). => ' + domMessages.length);
+});
+
+test("Render: message timeout", () => {
+    const comp = TestUtils.renderIntoDocument(<GlobalMessage><span>Some text here</span></GlobalMessage>);
+    const msg = comp.message('success', 'A success message');
+    msg.timeout(200);
+    const domMessages = TestUtils.scryRenderedDOMComponentsWithClass(comp, 'alert');
+    assert(domMessages.length == 1, 'Invalid number of messages (should be one). => ' + domMessages.length);
+    const promise = new Promise(function(resolve, reject) {
+        setTimeout(resolve, 300);
+    });
+    promise.then(() => {
+        const domMessages = TestUtils.scryRenderedDOMComponentsWithClass(comp, 'alert');
+        assert(domMessages.length == 0, 'Invalid number of messages (should be zero). => ' + domMessages.length);
+    });
+    return promise;
+});
