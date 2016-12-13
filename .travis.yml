@@ -12,3 +12,7 @@ before_script:
 script:
   - npm run build
   - ./node_modules/karma/bin/karma start test/karma.conf.js --browsers Firefox --single-run
+
+after_success:
+  - ./node_modules/codecov/bin/codecov -t dabc5c92-0156-4de3-bef3-67e90d86b784
+

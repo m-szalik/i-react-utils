@@ -1,6 +1,8 @@
 # i-React utils
 
 [![Build Status](https://travis-ci.org/m-szalik/i-react-utils.svg?branch=master)](https://travis-ci.org/m-szalik/i-react-utils)
+[![npm version](https://badge.fury.io/js/i-react-utils.svg)](https://badge.fury.io/js/i-react-utils)
+[![codecov](https://codecov.io/gh/m-szalik/i-react-utils/branch/master/graph/badge.svg)](https://codecov.io/gh/m-szalik/i-react-utils)
 
 ## Components:
 React components.
