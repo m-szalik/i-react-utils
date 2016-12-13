@@ -34,11 +34,11 @@ export class ListPagination extends React.Component {
                                 <ul className="pagination">
                                     {(() => {
                                         let pg = [];
-                                        pg.push((<li key="pg-prev" className={self.props.page < 2 ? "disabled" : ""}><a onClick={function() { if (self.props.page > 1) { self._handlePageChange(self.props.page -1) }}} aria-label="Previous"><span>&laquo;</span></a></li>));
+                                        pg.push((<li key="pg-prev" className={self.props.page < 2 ? "disabled" : ""} onClick={function() { if (self.props.page > 1) { self._handlePageChange(self.props.page -1) }}}><span>&laquo;</span></li>));
                                         for (let p = 1; p <= pages; p++) {
-                                            pg.push((<li key={`pg-pg-${p}`} className={p == self.props.page ? "active" : ""}><a onClick={function() { if (p != self.props.page) { self._handlePageChange(p) }}}>{p}</a></li>));
+                                            pg.push((<li key={`pg-pg-${p}`} className={p == self.props.page ? "active" : ""} onClick={function() { if (p != self.props.page) { self._handlePageChange(p) }}}>{p}</li>));
                                         }
-                                        pg.push((<li className={pages <= self.props.page ? "disabled" : ""} key="pg-next"><a onClick={function() { if (pages > self.props.page) { self._handlePageChange(self.props.page +1) }}}><span>&raquo;</span></a></li>));
+                                        pg.push((<li className={pages <= self.props.page ? "disabled" : ""} key="pg-next" onClick={function() { if (pages > self.props.page) { self._handlePageChange(self.props.page +1) }}}><span>&raquo;</span></li>));
                                         return pg;
                                     })()}
                                 </ul>
