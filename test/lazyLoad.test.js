@@ -4,7 +4,6 @@ import ReactDOM from "react-dom";
 import TestUtils from 'react-addons-test-utils';
 import LazyLoad from '../src/LazyLoad';
 
-
 class SuccessComponent extends React.Component {
     render() {
         return <span {...this.props} className="success">{this.props.children}</span>
@@ -17,41 +16,43 @@ class ErrorComponent extends React.Component {
     }
 }
 
-function createTestComponent(promise) {
-    const componentDefinition = (<LazyLoad style={{color:'red'}} ajax={() => promise} component={SuccessComponent} errorComponent={ErrorComponent} loadingComponent={<span className="loading">loading</span>}>content</LazyLoad>);
-    return TestUtils.renderIntoDocument(componentDefinition);
+function createTestComponent(ajaxFunction) {
+    return (<LazyLoad style={{color:'red'}} ajax={ajaxFunction} component={SuccessComponent} errorComponent={ErrorComponent} loadingComponent={<span className="loading">loading</span>}>content</LazyLoad>);
 }
 
-describe("LazyLoad - loading", function() {
-    this.timeout(3000);
 
-    const component = createTestComponent(new Promise(function(resolve, reject) { }));
-    it("Render", () => {
-        let span = TestUtils.findRenderedDOMComponentWithTag(component, 'span');
-        assert(span.className == 'loading', "Loading is " + span.className);
-    });
-});
-
-describe("LazyLoad - success", function() {
-    this.timeout(3000);
+test("Render - success", () => {
+    const shallowRenderer = TestUtils.createRenderer();
     let callback;
-    const component = createTestComponent(new Promise(function(resolve, reject) { callback = resolve; }));
+    const promise = new Promise(function(resolve, reject) { callback = resolve; });
+    const component = createTestComponent(function() { return promise; });
+    let dom = shallowRenderer.render(component);
+    const className = dom.props.className;
+    assert(className == 'loading', "ClassName is " + className + " but should be loading");
     callback({data:'AjaxSuccess'});
-    it("Render", () => {
-        let span = TestUtils.findRenderedDOMComponentWithTag(component, 'span');
-        assert(span.className == 'success', "Success className is " + span.className);
-        assert(span.innerHTML == 'content', "Failure content is " + span.innerHTML);
+    return Promise.all([promise]).then(() => {
+        dom = shallowRenderer.render(component);
+        assert(dom.props.data == 'AjaxSuccess', "Invalid data");
     });
 });
 
-describe("LazyLoad - failure", function() {
-    this.timeout(30000);
+test("Render - failure", () => {
+    const shallowRenderer = TestUtils.createRenderer();
     let callback;
-    const component = createTestComponent(new Promise(function(resolve, reject) { callback = reject; }));
-    callback({response: {data:'AjaxFail'}});
-    it("Render", () => {
-        let span = TestUtils.findRenderedDOMComponentWithTag(component, 'span');
-        assert(span.className == 'error', "Failure className is " + span.className);
-        assert(span.innerHTML == 'content', "Failure content is " + span.innerHTML);
+    const promise = new Promise(function(resolve, reject) { callback = reject; });
+    const component = createTestComponent(function() { return promise; });
+    let dom = shallowRenderer.render(component);
+    const className = dom.props.className;
+    assert(className == 'loading', "ClassName is " + className + " but should be loading");
+    callback({response:{data:'AjaxFailure'}});
+
+    // wait for React
+    const p = new Promise(function(resolve, reject) {
+        setTimeout(resolve, 100);
     });
+    p.then(() => {
+        let dom = shallowRenderer.render(component);
+        assert(dom.props.data == 'AjaxFailure', "Invalid data");
+    });
+    return p;
 });

@@ -15,9 +15,11 @@
   "devDependencies": {
     "assert": "*",
     "babel-cli": "^6.1.18",
+    "babel-jest": "^17.0.2",
     "babel-loader": "^6.2.0",
     "babel-plugin-add-module-exports": "*",
     "babel-plugin-react-transform": "*",
+    "babel-polyfill": "^6.20.0",
     "babel-preset-es2015": "*",
     "babel-preset-react": "*",
     "babel-preset-stage-0": "*",
@@ -25,30 +27,28 @@
     "envify": "*",
     "es6-promise": "*",
     "expose-loader": "*",
-    "isparta-loader": "*",
-    "karma": "*",
-    "karma-browserstack-launcher": "*",
-    "karma-chrome-launcher": "*",
-    "karma-coverage": "*",
-    "karma-firefox-launcher": "*",
-    "karma-mocha": "*",
-    "karma-sourcemap-loader": "*",
-    "karma-webpack": "*",
-    "mocha": "*",
-    "mocha-babel": "*",
+    "jest": "^17.0.3",
     "react-addons-test-utils": "^15.x.x",
     "react-dom": "^15.x.x",
+    "react-test-renderer": "^15.4.1",
     "transform-loader": "*",
     "webpack": "*",
     "webpack-dev-server": "*"
   },
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start test/karma.conf.js",
+    "test": "jest --watchAll",
     "build": "./node_modules/babel-cli/bin/babel.js --plugins add-module-exports --out-dir ./lib --no-comments --compact true --minified ./src/",
     "start": "node ./example/server.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/m-szalik/i-react-utils"
+  },
+  "jest": {
+    "verbose": true,
+    "setupTestFrameworkScriptFile": "test/env-setup.js",
+    "collectCoverage": [
+      "test/*.{js,jsx}"
+    ]
   }
 }

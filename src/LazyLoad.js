@@ -38,23 +38,23 @@ export default class LazyLoad extends React.Component {
         let promise = props.ajax();
         if (promise) {
             promise.then((res) => {
-                    let data = res.data;
+                let data = res.data;
+                const cProps = _subElementProps(props);
+                cProps.data = data;
+                const element = _buildElement(props.component, cProps, props.children);
+                this.setState({element: element, loading: false});
+            })
+            .catch((err) => {
+                devOnly(() => {console.log('Unable to load resource via ajax for LazyLoad.', err);});
+                if (props.errorComponent) {
                     const cProps = _subElementProps(props);
-                    cProps.data = data;
-                    const element = _buildElement(props.component, cProps, props.children);
+                    cProps.data = err.response.data;
+                    const element = _buildElement(props.errorComponent, cProps, props.children);
                     this.setState({element: element, loading: false});
-                })
-                .catch((err) => {
-                    devOnly(() => {console.log('Unable to load resource via ajax for LazyLoad.', err);});
-                    if (props.errorComponent) {
-                        const cProps = _subElementProps(props);
-                        cProps.data = err.response.data;
-                        const element = _buildElement(props.errorComponent, cProps, props.children);
-                        this.setState({element: element, loading: false});
-                    } else {
-                        this.setState({element: null, loading: false});
-                    }
-                });
+                } else {
+                    this.setState({element: null, loading: false});
+                }
+            });
         } else {
             throw new Error('Ajax returned ' + promise + ' instead of Promise.');
         }

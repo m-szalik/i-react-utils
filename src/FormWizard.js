@@ -16,7 +16,7 @@ export function createIsRequiredFormValidator(message) {
         if (typeof value == 'string') {
             return !(value == null || value == undefined || value.trim().length == 0);
         } else {
-            return value == undefined ? false : value;
+            return value == undefined ? false : value ? true : false;
         }
     });
     validator.setRequired = true;
@@ -57,6 +57,7 @@ export function createRegexFormValidator(regex, message) {
         if (value == undefined || value == null) {
             return true;
         }
+        console.log("TEST ", regex, value, regex.test(value));
         return regex.test(value);
     });
     return validator;
