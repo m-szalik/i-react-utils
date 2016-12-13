@@ -57,7 +57,6 @@ export function createRegexFormValidator(regex, message) {
         if (value == undefined || value == null) {
             return true;
         }
-        console.log("TEST ", regex, value, regex.test(value));
         return regex.test(value);
     });
     return validator;

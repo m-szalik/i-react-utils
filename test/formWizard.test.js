@@ -22,7 +22,6 @@ test("FormWizard: Basic form.", () => {
   const inputs = TestUtils.scryRenderedDOMComponentsWithTag(component, 'input');
   const selectOps = TestUtils.scryRenderedDOMComponentsWithTag(component, 'option');
   const textareas = TestUtils.scryRenderedDOMComponentsWithTag(component, 'textarea');
-  console.debug('Form is:', form);
 
   for(let i=0; i<inputs.length; i++) {
       if (inputs[i].type == 'checkbox') {
@@ -33,7 +32,6 @@ test("FormWizard: Basic form.", () => {
       }
   }
   TestUtils.Simulate.change(textareas[0], { target: { value: 'TextArea' } });
-
   TestUtils.Simulate.submit(form);
 
   expect(data).not.toBe(null);
