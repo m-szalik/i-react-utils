@@ -185,7 +185,7 @@ export function isValidEmail(email) {
  * @param callback
  */
 export function devOnly(callback) {
-    if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    if(process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
         callback();
     }
 }
