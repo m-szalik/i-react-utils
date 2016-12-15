@@ -16,6 +16,7 @@ module.exports.getObjProperty = utilsFactory.getObjProperty;
 module.exports.isValidNIP = utilsFactory.isValidNIP;
 module.exports.isValidREGON = utilsFactory.isValidREGON;
 module.exports.isValidEmail = utilsFactory.isValidEmail;
+module.exports.devOnly = utilsFactory.devOnly;
 
 module.exports.fw = {
     createFormValidator : fwFactory.createFormValidator,

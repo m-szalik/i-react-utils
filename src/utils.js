@@ -179,3 +179,13 @@ export function isValidEmail(email) {
     return re.test(email);
 }
 
+/**
+ * Execute callback only in dev mode
+ * Example: devOnly(() => {console.log('Some dev message.');});
+ * @param callback
+ */
+export function devOnly(callback) {
+    if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+        callback();
+    }
+}

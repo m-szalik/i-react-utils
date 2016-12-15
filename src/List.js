@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import {SimpleListTable, ListPagination} from './ListComponents';
-import {isEquivalent, shallowCopyExcept} from './utils';
-import {devOnly, _buildElement} from './utils-internal';
+import {devOnly, isEquivalent, shallowCopyExcept} from './utils';
+import {_buildElement} from './utils-internal';
 
 
 function copyProps(props) {

@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {devOnly} from './utils-internal';
+import {devOnly} from './utils';
 
 /**
  */

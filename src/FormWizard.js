@@ -1,6 +1,6 @@
 import React from 'react';
-import {setObjProperty, getObjProperty, isNotBlank} from './utils';
-import {devOnly} from './utils-internal';
+import {devOnly, setObjProperty, getObjProperty, isNotBlank} from './utils';
+
 
 export function createFormValidator(message, isValidFunction) {
     return {

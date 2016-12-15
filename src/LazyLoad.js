@@ -1,6 +1,6 @@
 import React from 'react';
-import {shallowCopyExcept} from './utils';
-import {_buildElement, devOnly} from './utils-internal';
+import {devOnly, shallowCopyExcept} from './utils';
+import {_buildElement} from './utils-internal';
 
 function _subElementProps(source) {
     let dst = {};

@@ -1,7 +1,7 @@
 /** Sub-components for: List and AjaxList */
 import React, { PropTypes } from 'react';
-import {isEquivalent, shallowCopyExcept} from './utils';
-import {devOnly, _buildElement} from './utils-internal';
+import {devOnly, isEquivalent, shallowCopyExcept} from './utils';
+import {_buildElement} from './utils-internal';
 
 export class ListPagination extends React.Component {
     static propTypes = {
