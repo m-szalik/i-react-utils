@@ -56,3 +56,19 @@ test("Render - failure", () => {
     });
     return p;
 });
+
+test("Invalid definition - missing component", () => {
+    const def = (<LazyLoad ajax={() => {}}/>);
+    try {
+        TestUtils.createRenderer().render(def);
+        assert(false, 'Exception was expected!')
+    } catch (err) { /** ok it's expected */ }
+});
+
+test("Invalid definition - not a promise", () => {
+    const def = (<LazyLoad ajax={() => { return "not a promise";}} component={SuccessComponent}/>);
+    try {
+        TestUtils.createRenderer().render(def);
+        assert(false, 'Exception was expected!')
+    } catch (err) { /** ok it's expected */ }
+});

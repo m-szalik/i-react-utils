@@ -36,7 +36,7 @@ export default class LazyLoad extends React.Component {
             throw new Error('Property component of LazyLoad is required');
         }
         let promise = props.ajax();
-        if (promise) {
+        if (promise && promise.then && promise.catch) {
             promise.then((res) => {
                 let data = res.data;
                 const cProps = _subElementProps(props);
