@@ -2,9 +2,14 @@
   "name": "i-react-utils",
   "version": "1.0.15",
   "description": "iReact utils",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "m-szalik",
   "main": "lib/index.js",
+  "keywords": [ "react", "reactjs", "component", "javascript", "react-component", "javascript-utils" ],
+  "bugs": {
+    "url": "https://github.com/m-szalik/i-react-utils/issues"
+  },
+  "homepage": "https://github.com/m-szalik/i-react-utils/blob/master/README.md",
   "directories": {
     "test": "test"
   },
@@ -31,13 +36,16 @@
     "react-addons-test-utils": "^15.x.x",
     "react-dom": "^15.x.x",
     "react-test-renderer": "^15.4.1",
+    "rimraf": "^2.4.3",
     "transform-loader": "*",
     "webpack": "*",
     "webpack-dev-server": "*"
   },
   "scripts": {
+    "clean": "rimraf lib dist",
     "test": "jest --watchAll",
     "build": "./node_modules/babel-cli/bin/babel.js --plugins add-module-exports --out-dir ./lib --no-comments --compact true --minified ./src/",
+    "prepublish": "npm run clean && npm run build",
     "start": "node ./example/server.js"
   },
   "repository": {
