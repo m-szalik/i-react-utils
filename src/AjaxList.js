@@ -137,10 +137,10 @@ export default class AjaxList extends React.Component {
     render() {
         const {paging, items, error} = this.state;
         let noDataElem;
-        if (items == null) {
-            noDataElem = this.loadingElement;
+        if (error) {
+            noDataElem = error;
         } else {
-            noDataElem = error ? error : this.noDataElement;
+            noDataElem = items == null ? this.loadingElement : this.noDataElement;
         }
         const indexOffset = Math.max(0, paging.page -1) * paging.count;
         return (
