@@ -7,7 +7,15 @@ import GlobalMessage from '../src/GlobalMessage';
 
 class FormWizardInputWrapper extends React.Component {
     render() {
-        return (<div>{this.props.type} <strong>{this.props.label}</strong> {this.props.children}</div>);
+        return (<div>
+                <ul>
+                    <li>Type: {this.props.type}</li>
+                    <li>Label: {this.props.label}</li>
+                    <li>Required: {this.props.required ? 'YES' : 'NO'}</li>
+                </ul>
+                {this.props.children}
+                {this.props.error != null ? (<span className="help-block">{this.props.error}</span>) : null}
+            </div>);
     }
 }
 
@@ -20,14 +28,14 @@ class ExamplePage extends React.Component {
 
     constructor(props) {
         super();
-        this.state = {listData : ['orange', 'blue', 'brown', 'red', 'yellow']};
+        this.state = {listData : ['orange', 'blue', 'brown', 'red', 'yellow'], textFieldRequired : false};
         this.addPurpleHandler = this.addPurpleHandler.bind(this);
         this.submitCallback = this.submitCallback.bind(this);
     }
 
     addPurpleHandler() {
-        console.debug("addP");
-        let list = this.state.listData;
+        console.debug("add purple row");
+        let list = this.state.listData.slice();
         list.push('purple');
         this.setState({listData:list});
     }
@@ -38,7 +46,7 @@ class ExamplePage extends React.Component {
     }
 
     render() {
-        return (<div>
+        return (<div className="container">
             <h1>Examples</h1>
             <div>
                 <h2>List</h2>
@@ -53,10 +61,17 @@ class ExamplePage extends React.Component {
             <hr/>
             <div>
                 <h2>FormWizard</h2>
-                <fw.Form onSubmit={this.submitCallback} wrapper={FormWizardInputWrapper}>
-                    <fw.Input type="checkbox" name="mainSection.enabled" inputId="inp-chb" label="Input one"/>
-                    <fw.Input type="text" name="mainSection.text" inputId="inp-txt" label="Input text" defaultValue="default"/>
-                    <input type="text" name="pure" defaultValue="pureDefault"/>
+                <fw.Form onSubmit={this.submitCallback} wrapper={FormWizardInputWrapper} instantValidation={true}>
+                    <div>
+                        <fw.Input type="checkbox" name="mainSection.enabled" inputId="inp-chb" label="Input one"/>
+                    </div>
+                    <div>
+                        <fw.Input type="text" name="mainSection.text" inputId="inp-txt" label="Input text" defaultValue="default" required={this.state.textFieldRequired}/>
+                        <span className="btn btn-default" onClick={() => { this.setState({textFieldRequired:!this.state.textFieldRequired}) }}>Toggle required</span>
+                    </div>
+                    <div>
+                        <input type="text" name="pure" defaultValue="pureDefault" />
+                    </div>
                     <input type="submit" className="btn-primary" />
                 </fw.Form>
             </div>
