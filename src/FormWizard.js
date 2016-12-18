@@ -14,7 +14,7 @@ export function createIsRequiredFormValidator(message) {
     message = message || 'Field is required';
     let validator = createFormValidator(message, function(value) {
         if (typeof value == 'string') {
-            return !(value == null || value == undefined || value.trim().length == 0);
+            return isNotBlank(value);
         } else {
             return value == undefined ? false : value ? true : false;
         }
