@@ -129,25 +129,44 @@ export class Input extends React.Component {
     constructor(props) {
         super();
         this.wizardIndex = -1;
+        this.props = {};
+        this.state = this._configureWithProps(props);
         this.props = props;
+        this.state.error = null;
+        this.inputId = props.inputId || 'form-input-' + props.name;
+        this._handleChange = this._handleChange.bind(this);
+        this.validate = this.validate.bind(this);
+        this.value = this.value.bind(this);
+    }
+
+    componentWillReceiveProps(newProps) {
+        const stateUpdate = this._configureWithProps(newProps);
+        this.props = newProps;
+        this.setState(stateUpdate);
+    }
+
+    _configureWithProps(props) {
         let required = props.required;
+        const validators = [];
+        const conditionalValidator = createFormValidator('Field is required', (val) => props.required == false || isNotBlank(val));
+        validators.push(conditionalValidator);
         props.validators.forEach((validator) => {
             if (validator.setRequired) {
                 required = true;
             }
+            validators.push(validator);
         });
-        this.validators = props.validators.slice();
-        this.state = { error : null, label : props.label, required : required };
-        this.inputId = props.inputId || 'form-input-' + props.name;
-        if (this.validators.length == 0 && props.required) {
-            this.validators.push(createIsRequiredFormValidator());
+        this.validators = validators;
+        this.orgOnChange = props.onChange;
+        const st = {};
+        if (this.props.label != props.label) {
+            st.label = props.label;
         }
-        this._handleChange = this._handleChange.bind(this);
-        this.validate = this.validate.bind(this);
-        this.value = this.value.bind(this);
-        this.orgOnChange = this.props.onChange;
+        if (this.props.required != props.required) {
+            st.required = props.required;
+        }
+        return st;
     }
-
 
     componentWillMount() {
         // register field in form
@@ -217,7 +236,6 @@ export class Input extends React.Component {
         }
         return old;
     }
-
 
     _handleChange(event) {
         let val = event.target.value;
