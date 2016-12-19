@@ -5,7 +5,14 @@
   "license": "MIT",
   "author": "m-szalik",
   "main": "lib/index.js",
-  "keywords": [ "react", "reactjs", "component", "javascript", "react-component", "javascript-utils" ],
+  "keywords": [
+    "react",
+    "reactjs",
+    "component",
+    "javascript",
+    "react-component",
+    "javascript-utils"
+  ],
   "bugs": {
     "url": "https://github.com/m-szalik/i-react-utils/issues"
   },
@@ -19,6 +26,7 @@
   },
   "devDependencies": {
     "assert": "*",
+    "axios": "^0.15.3",
     "babel-cli": "^6.1.18",
     "babel-jest": "^17.0.2",
     "babel-loader": "^6.2.0",
