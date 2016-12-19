@@ -26,10 +26,10 @@ export default class AjaxList extends React.Component {
     };
 
     static defaultProps = {
-        id : "ajaxList-" + (Math.random() * 10000),
+        id : "ajaxList-" + Math.floor(Math.random() * 1000000).toString(22),
         showPagination : true,
         headerAlwaysOn : true,
-        className : "ajaxList row",
+        className : "ajaxList",
         errorComponent : (<div className="center-block ajaxList-error">An error occurred.</div>),
         loadingComponent : (<div className="center-block ajaxList-loader"></div>)
     };
@@ -145,12 +145,12 @@ export default class AjaxList extends React.Component {
         const indexOffset = Math.max(0, paging.page -1) * paging.count;
         return (
             <div id={this.id} {...this.htmlProps}>
-                <SimpleListTable id={this.id} renderRow={this.props.renderRow} data={items} headerAlwaysOn={this.props.headerAlwaysOn} noDataElement={noDataElem} indexOffset={indexOffset}>
+                <SimpleListTable className={this.props.className} id={this.id} renderRow={this.props.renderRow} data={items} headerAlwaysOn={this.props.headerAlwaysOn} noDataElement={noDataElem} indexOffset={indexOffset}>
                     {this.props.children}
                 </SimpleListTable>
                 {(() => {
                     if (this.props.showPagination) {
-                        return (<ListPagination onPageChanged={this._handlePageChange} id={this.id} total={paging.total} count={paging.count} page={paging.page}/>);
+                        return (<ListPagination className={this.props.className} onPageChanged={this._handlePageChange} id={this.id} total={paging.total} count={paging.count} page={paging.page}/>);
                     } else {
                         return null;
                     }

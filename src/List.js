@@ -26,7 +26,7 @@ export default class List extends React.Component {
         showPagination : true,
         headerAlwaysOn : true,
         count : 10,
-        id : "list-" + (Math.random() * 10000),
+        id : "list-" + Math.floor(Math.random() * 1000000).toString(22),
         prepareDataForPage : function(data,page,count) {
             return data.slice((page -1)*count, page*count);
         }
@@ -89,13 +89,13 @@ export default class List extends React.Component {
         const {items, total, page} = this.state;
         return (
             <div {...this.htmlProps} key={this.id}>
-                <SimpleListTable id={this.props.id} renderRow={this.props.renderRow} data={items} indexOffset={(page -1) * this.props.count}
+                <SimpleListTable className={this.props.className} id={this.props.id} renderRow={this.props.renderRow} data={items} indexOffset={(page -1) * this.props.count}
                                  headerAlwaysOn={this.props.headerAlwaysOn} noDataElement={this.noDataElement}>
                     {this.props.children}
                 </SimpleListTable>
                 {(() => {
                     if (items && this.props.showPagination) {
-                        return (<ListPagination onPageChanged={this._handlePageChange} id={this.props.id} total={total} count={this.props.count} page={page}/>);
+                        return (<ListPagination className={this.props.className} onPageChanged={this._handlePageChange} id={this.props.id} total={total} count={this.props.count} page={page}/>);
                     } else {
                         return null;
                     }

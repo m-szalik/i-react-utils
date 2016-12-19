@@ -24,32 +24,27 @@ export class ListPagination extends React.Component {
 
     render() {
         const self = this;
-        return (<div className="row pagination-container">
-            {(() => {
-                if (self.props.page != undefined) {
-                    let pages = Math.ceil(self.props.total / self.props.count);
-                    if (pages > 1) {
-                        return (
-                            <nav className="list-pagination" id={`${self.props.id}-pagination`}>
-                                <ul className="pagination">
-                                    {(() => {
-                                        let pg = [];
-                                        pg.push((<li key="pg-prev" className={self.props.page < 2 ? "disabled" : ""} onClick={function() { if (self.props.page > 1) { self._handlePageChange(self.props.page -1) }}}><span>&laquo;</span></li>));
-                                        for (let p = 1; p <= pages; p++) {
-                                            pg.push((<li key={`pg-pg-${p}`} className={p == self.props.page ? "active" : ""} onClick={function() { if (p != self.props.page) { self._handlePageChange(p) }}}>{p}</li>));
-                                        }
-                                        pg.push((<li className={pages <= self.props.page ? "disabled" : ""} key="pg-next" onClick={function() { if (pages > self.props.page) { self._handlePageChange(self.props.page +1) }}}><span>&raquo;</span></li>));
-                                        return pg;
-                                    })()}
-                                </ul>
-                            </nav>
-                        );
-                    } else {
-                        return null;
-                    }
-                }
-            })()}
-        </div>);
+        if (self.props.page != undefined) {
+            let pages = Math.ceil(self.props.total / self.props.count);
+            if (pages > 1) {
+                return (
+                    <nav className={`list-pagination ${this.props.className ? this.props.className : ''}`} id={`${self.props.id}-pagination`}>
+                        <ul className="pagination">
+                            {(() => {
+                                let pg = [];
+                                pg.push((<li key="pg-prev" className={self.props.page < 2 ? "disabled" : ""} onClick={function() { if (self.props.page > 1) { self._handlePageChange(self.props.page -1) }}}><span>&laquo;</span></li>));
+                                for (let p = 1; p <= pages; p++) {
+                                    pg.push((<li key={`pg-pg-${p}`} className={p == self.props.page ? "active" : ""} onClick={function() { if (p != self.props.page) { self._handlePageChange(p) }}}><span>{p}</span></li>));
+                                }
+                                pg.push((<li className={pages <= self.props.page ? "disabled" : ""} key="pg-next" onClick={function() { if (pages > self.props.page) { self._handlePageChange(self.props.page +1) }}}><span>&raquo;</span></li>));
+                                return pg;
+                            })()}
+                        </ul>
+                    </nav>
+                );
+            }
+        }
+        return null;
     }
 }
 
@@ -93,7 +88,7 @@ export class SimpleListTable extends React.Component {
         const hasData = data && data.length > 0;
         const showHeaders = hasData || this.props.headerAlwaysOn;
         return (
-            <table className={`table ${this.props.className}`} style={{width:'100%'}} id={this.id + "-table"}>
+            <table className={`table ${this.props.className ? this.props.className : ''}`} style={{width:'100%'}} id={this.id + "-table"}>
                 {showHeaders ? this.parts.thead : null}
                 {(() => {
                     if (hasData) {
