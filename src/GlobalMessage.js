@@ -99,27 +99,36 @@ export default class GlobalMessage extends React.Component {
                     _messenger.clear();
                 },
                 close(message) {
-                   _messenger.close(message);
+                    _messenger.close(message);
                 }
             }
         };
     }
 
+    generateHtml(_messages, _alertType){
+        return (<div className={`alert-container custom-alert-${_alertType}`}><div className={`container`}><span className="ico"></span>{_messages}</div></div>)
+    }
+
     render() {
-        const messages = [];
+        const messages = [], rdyToRenderMsgs = [];
         let id = 0;
         this.state.messages.forEach((m) => {
             let key='globalMessage-' + id;
-            messages.push((<div key={key} className={`alert alert-${m.type}`} role="alert" dangerouslySetInnerHTML={{__html: m.msg}}/>));
-            id++;
-        });
+        messages[m.type] = messages[m.type] ? messages[m.type] : [];
+        messages[m.type].push((<div key={key} className={`alert alert-${m.type}`} role="alert" dangerouslySetInnerHTML={{__html: m.msg}}/>));
+        id++;
+    });
+
+        for (let key in messages) {
+            rdyToRenderMsgs.push(this.generateHtml(messages[key], key));
+        }
 
         return (
             <div {...this.props}>
-                <div className="globalMessages">{messages}</div>
-                {this.props.children} test
-            </div>
-        );
+    <div className="globalMessages">{rdyToRenderMsgs}</div>
+            {this.props.children}
+    </div>
+    );
     }
 }
 
