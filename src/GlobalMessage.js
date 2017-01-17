@@ -117,7 +117,7 @@ export default class GlobalMessage extends React.Component {
         return (
             <div {...this.props}>
                 <div className="globalMessages">{messages}</div>
-                {this.props.children}
+                {this.props.children} test
             </div>
         );
     }
