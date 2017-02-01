@@ -106,7 +106,8 @@ export default class GlobalMessage extends React.Component {
     }
 
     generateHtml(_messages, _alertType){
-        return (<div className={`alert-container custom-alert-${_alertType}`}><div className={`container`}><span className="ico"></span>{_messages}</div></div>)
+        const key = 'globalMessage-typeContainer-' + _alertType;
+        return (<div key={key} className={`alert-container custom-alert-${_alertType}`}><div className={`container`}><span className="ico"></span>{_messages}</div></div>)
     }
 
     render() {
@@ -114,10 +115,10 @@ export default class GlobalMessage extends React.Component {
         let id = 0;
         this.state.messages.forEach((m) => {
             let key='globalMessage-' + id;
-        messages[m.type] = messages[m.type] ? messages[m.type] : [];
-        messages[m.type].push((<div key={key} className={`alert alert-${m.type}`} role="alert" dangerouslySetInnerHTML={{__html: m.msg}}/>));
-        id++;
-    });
+            messages[m.type] = messages[m.type] ? messages[m.type] : [];
+            messages[m.type].push((<div key={key} className={`alert alert-${m.type}`} role="alert" dangerouslySetInnerHTML={{__html: m.msg}}/>));
+            id++;
+        });
 
         for (let key in messages) {
             rdyToRenderMsgs.push(this.generateHtml(messages[key], key));
@@ -125,10 +126,10 @@ export default class GlobalMessage extends React.Component {
 
         return (
             <div {...this.props}>
-    <div className="globalMessages">{rdyToRenderMsgs}</div>
-            {this.props.children}
-    </div>
-    );
+                <div className="globalMessages">{rdyToRenderMsgs}</div>
+                {this.props.children}
+            </div>
+        );
     }
 }
 
