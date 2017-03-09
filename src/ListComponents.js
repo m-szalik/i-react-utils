@@ -9,7 +9,12 @@ export class ListPagination extends React.Component {
         id : PropTypes.string.isRequired,
         total : PropTypes.number.isRequired,
         count : PropTypes.number.isRequired,
-        page : PropTypes.number.isRequired
+        page : PropTypes.number.isRequired,
+        maxPagesDisplayed : PropTypes.number
+    };
+
+    static defaultProps = {
+        maxPagesDisplayed: 15
     };
 
     constructor(props) {
@@ -31,10 +36,20 @@ export class ListPagination extends React.Component {
                     <nav className={`list-pagination ${this.props.className ? this.props.className : ''}`} id={`${self.props.id}-pagination`}>
                         <ul className="pagination">
                             {(() => {
-                                let pg = [];
+                                const current = self.props.page;
+                                let pg = [], skipped = false;
                                 pg.push((<li key="pg-prev" className={self.props.page < 2 ? "disabled" : ""} onClick={function() { if (self.props.page > 1) { self._handlePageChange(self.props.page -1) }}}><span>&laquo;</span></li>));
                                 for (let p = 1; p <= pages; p++) {
-                                    pg.push((<li key={`pg-pg-${p}`} className={p == self.props.page ? "active" : ""} onClick={function() { if (p != self.props.page) { self._handlePageChange(p) }}}><span>{p}</span></li>));
+                                    if (pages < self.props.maxPagesDisplayed || p < 2 || p > pages-2 || Math.abs(p-current) < 2) {
+                                        skipped = false;
+                                        pg.push((<li key={`pg-pg-${p}`} className={p == self.props.page ? "active" : ""}
+                                                     onClick={function() { if (p != current) { self._handlePageChange(p) }}}><span>{p}</span></li>));
+                                    } else {
+                                        if (! skipped) {
+                                            skipped = true;
+                                            pg.push((<li key={`pg-skp-${p}`} className="pg-skp disabled"><span>&hellip;</span></li>));
+                                        }
+                                    }
                                 }
                                 pg.push((<li className={pages <= self.props.page ? "disabled" : ""} key="pg-next" onClick={function() { if (pages > self.props.page) { self._handlePageChange(self.props.page +1) }}}><span>&raquo;</span></li>));
                                 return pg;
