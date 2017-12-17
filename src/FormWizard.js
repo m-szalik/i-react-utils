@@ -337,6 +337,7 @@ export class Form extends React.Component {
         this.formData = nextProps.formData;
         this.formProps = Object.assign({}, nextProps);
         delete this.formProps.formData; // clear it
+        delete this.formProps.processHTMLInputs; // clear it
         delete this.formProps.instantValidation; // clear it
         delete this.formProps.onValidationError; // clear it
         delete this.formProps.onSubmit; // clear it
