@@ -26,21 +26,21 @@
   },
   "devDependencies": {
     "assert": "*",
-    "axios": "^0.15.3",
+    "axios": "^0.17.x",
     "babel-cli": "^6.1.18",
-    "babel-jest": "^17.0.2",
-    "babel-loader": "^6.2.0",
+    "babel-jest": "^21.0.0",
+    "babel-loader": "^7.1.x",
     "babel-plugin-add-module-exports": "*",
     "babel-plugin-react-transform": "*",
     "babel-polyfill": "^6.20.0",
     "babel-preset-es2015": "*",
     "babel-preset-react": "*",
     "babel-preset-stage-0": "*",
-    "codecov": "^1.0.1",
+    "codecov": "^3.0.0",
     "envify": "*",
     "es6-promise": "*",
     "expose-loader": "*",
-    "jest": "^17.0.3",
+    "jest": "^21.0.0",
     "react-addons-test-utils": "^15.x.x",
     "react-dom": "^15.x.x",
     "react-test-renderer": "^15.4.1",
@@ -62,9 +62,7 @@
   },
   "jest": {
     "verbose": true,
-    "setupTestFrameworkScriptFile": "test/env-setup.js",
-    "collectCoverage": [
-      "test/*.{js,jsx}"
-    ]
+    "setupTestFrameworkScriptFile": "./test-env-setup.js",
+    "collectCoverage":true
   }
 }
