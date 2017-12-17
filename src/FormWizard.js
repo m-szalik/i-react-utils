@@ -308,20 +308,23 @@ export class Form extends React.Component {
     static propTypes = {
         formData : React.PropTypes.object,          // where to save or get values
         instantValidation : React.PropTypes.bool,   // parameter to pass to Input(s)
+        processHTMLInputs : React.PropTypes.bool,       // process html's inputs and selects
         onValidationError : React.PropTypes.func,   // callback func(event, form)
         onSubmit : React.PropTypes.func,            // callback func(event, form)
         wrapper : React.PropTypes.func              // default wrapper component
     };
 
     static defaultProps = {
-        instantValidation : false,
-        formData : {}
+        instantValidation:false,
+        formData : {},
+        processHTMLInputs:true
     };
 
     constructor(props) {
         super();
         this.mounted = false;
         this.formInputs = [];
+        this.htmlForm = null;
         this.state = { };
         this.componentWillReceiveProps(props);
         this._handleOnSubmit = this._handleOnSubmit.bind(this);
@@ -367,6 +370,27 @@ export class Form extends React.Component {
                 devOnly(() => { console.debug('Invalid field', fin);  });
             }
         });
+        if (this.props.processHTMLInputs && this.htmlForm) {
+            const out = this.item;
+            var elements = this.htmlForm.getElementsByTagName('input');
+            for (var i = 0; i < elements.length; ++i) {
+                var e = elements[i];
+                var name = e.getAttribute('name');
+                var value = e.getAttribute('value');
+                if (name && name.length > 0 && value && value.length > 0) {
+                    setObjProperty(out, name, value);
+                }
+            }
+            elements = this.htmlForm.getElementsByTagName('select');
+            for (var i = 0; i < elements.length; ++i) {
+                var e = elements[i];
+                var name = e.getAttribute('name');
+                var value = e.options[e.selectedIndex].value;
+                if (name && name.length > 0 && value && value.length > 0) {
+                    setObjProperty(out, name, value);
+                }
+            }
+        }
         if (ret) {
             if (this.props.onSubmit) {
                 this.props.onSubmit(event, this);
