@@ -337,7 +337,7 @@ export class Form extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
         this.formData = nextProps.formData;
-        this.formProps = Object.assign({}, nextProps);
+        this.formProps = Object.assign({"noValidate":true}, nextProps);
         delete this.formProps.formData; // clear it
         delete this.formProps.processHTMLInputs; // clear it
         delete this.formProps.instantValidation; // clear it
