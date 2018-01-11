@@ -310,10 +310,11 @@ export class Form extends React.Component {
     static propTypes = {
         formData : React.PropTypes.object,          // where to save or get values
         instantValidation : React.PropTypes.bool,   // parameter to pass to Input(s)
-        processHTMLInputs : React.PropTypes.bool,       // process html's inputs and selects
+        processHTMLInputs : React.PropTypes.bool,   // process html's inputs and selects
         onValidationError : React.PropTypes.func,   // callback func(event, form)
+        validation : React.PropTypes.func,          // extra validation func(event, form, bool) boolean - validation's result
         onSubmit : React.PropTypes.func,            // callback func(event, form)
-        wrapper : React.PropTypes.func              // default wrapper component
+        wrapper :  React.PropTypes.func             // default wrapper component
     };
 
     static defaultProps = {
@@ -344,6 +345,7 @@ export class Form extends React.Component {
         delete this.formProps.onValidationError; // clear it
         delete this.formProps.onSubmit; // clear it
         delete this.formProps.wrapper; // clear it
+        delete this.formProps.validation; // clear it
         if (this.mounted) {
             this.forceUpdate();
         }
@@ -393,6 +395,11 @@ export class Form extends React.Component {
                     setObjProperty(out, name, value);
                 }
             }
+        }
+        if (this.props.validation) {
+            let ret2 = this.props.validation(event, this, ret);
+            devOnly(() => { console.debug('Form validation returned', ret2, 'for', event, this, ret);  });
+            ret = ret2;
         }
         if (ret) {
             if (this.props.onSubmit) {
