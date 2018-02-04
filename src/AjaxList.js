@@ -14,6 +14,7 @@ export default class AjaxList extends React.Component {
     static propTypes = {
         id : React.PropTypes.string, // list id
         fetchDataCallback : React.PropTypes.func.isRequired, // func that returns ajax promise.
+        dataTransform : React.PropTypes.func, // func that transforms data, function(data, response) --> transformed data
         onFetch : React.PropTypes.func, // when data loading starts, function(event)
         onError : React.PropTypes.func, // when data loading finishes with error, function(event)
         onSuccess : React.PropTypes.func, // when data loading finishes with success, function(event)
@@ -80,18 +81,22 @@ export default class AjaxList extends React.Component {
         let promise = this.props.fetchDataCallback(page);
         if (promise) {
             promise.then((resp) => {
+                let data = resp.data;
+                if (this.props.dataTransform) {
+                    data = this.props.dataTransform(data, resp);
+                }
                 if (this.mounted) {
-                    if (Array.isArray(resp.data)) {
+                    if (Array.isArray(data)) {
                         let page = this.state.paging.page + 1;
                         const np = {... this.state.paging};
                         np.page = page;
-                        this.setState({items: resp.data, paging: np});
+                        this.setState({items: data, paging: np});
                     } else {
-                        this.setState(resp.data);
+                        this.setState(data);
                     }
                 }
                 if (this.props.onSuccess) {
-                    this.props.onSuccess({ page : page, data : resp.data });
+                    this.props.onSuccess({ page : page, data : data });
                 }
             },
             (err) => {
