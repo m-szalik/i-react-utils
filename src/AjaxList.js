@@ -6,7 +6,7 @@ import {_buildElement} from './utils-internal';
 
 
 function copyProps(props) {
-    return shallowCopyExcept({}, props, ['fetchDataCallback', 'onFetch', 'onSuccess', 'onError', 'renderRow', 'showPagination', 'loadingComponent', 'errorComponent', 'noDataComponent', 'headerAlwaysOn']);
+    return shallowCopyExcept({}, props, ['dataTransform', 'fetchDataCallback', 'onFetch', 'onSuccess', 'onError', 'renderRow', 'showPagination', 'loadingComponent', 'errorComponent', 'noDataComponent', 'headerAlwaysOn']);
 }
 
 export default class AjaxList extends React.Component {
