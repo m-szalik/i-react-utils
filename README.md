@@ -95,30 +95,3 @@ Where:
  * **loadingComponent** = an React component or element to render during ajax call (optional).
 
 
-## Utils and helpers:
-
-`import {isEmptyObject, isNotBlank, setObjProperty, getObjProperty, isValidNIP, isValidREGON, isValidEmail, devOnly} from 'i-react-utils';`
-
-`bool isEmptyObject(object)` - true if object has no it's own properties
-
-
-`bool isNotBlank(string)` - true if string is not blank
-
-
-`void setObjProperty(obj, propertyPath, value)` - set object property for `propertyPath` equal to `a.b` result is `{a:{b:value}}`
-
-
-`object getObjProperty(obj, propertyPath)` - get property value. See description for `setObjProperty(obj, propertyPath, value)`
-
-`void devOnly(callback)` - execute `callback` only when running in development mode
-
-`bool isValidNIP(string)`
-
-
-`bool isValidREGON(string)`
-
-
-`bool isValidEmail(string)`
-
-
-

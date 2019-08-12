@@ -6,18 +6,6 @@ var utilsFactory = require('./utils');
 var fwFactory = require('./FormWizard');
 var bcFactory = require('./Breadcrumbs');
 
-module.exports.shallowCopy = utilsFactory.shallowCopy;
-module.exports.shallowCopyExcept = utilsFactory.shallowCopyExcept;
-module.exports.isEquivalent = utilsFactory.isEquivalent;
-module.exports.isEmptyObject = utilsFactory.isEmptyObject;
-module.exports.isNotBlank = utilsFactory.isNotBlank;
-module.exports.setObjProperty = utilsFactory.setObjProperty;
-module.exports.getObjProperty = utilsFactory.getObjProperty;
-module.exports.isValidNIP = utilsFactory.isValidNIP;
-module.exports.isValidREGON = utilsFactory.isValidREGON;
-module.exports.isValidEmail = utilsFactory.isValidEmail;
-module.exports.devOnly = utilsFactory.devOnly;
-
 module.exports.fw = {
     createFormValidator : fwFactory.createFormValidator,
     createIsRequiredFormValidator : fwFactory.createIsRequiredFormValidator,
