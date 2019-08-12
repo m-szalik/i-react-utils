@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {devOnly} from './utils';
+import {devOnly} from 'i-js-utils';
 
 /**
  */

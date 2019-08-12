@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallowCopyExcept} from './utils';
+import {shallowCopyExcept} from 'i-js-utils';
 
 export default class PasswordStrengthMeter extends React.Component {
     static propTypes = {

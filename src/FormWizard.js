@@ -1,5 +1,5 @@
 import React from 'react';
-import {devOnly, setObjProperty, getObjProperty, isNotBlank} from './utils';
+import {devOnly, setObjProperty, getObjProperty, isNotBlank} from 'i-js-utils';
 
 
 export function createFormValidator(message, isValidFunction) {

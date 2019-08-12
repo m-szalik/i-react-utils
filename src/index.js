@@ -2,7 +2,6 @@
 
 module.exports.__esModule = true;
 
-var utilsFactory = require('./utils');
 var fwFactory = require('./FormWizard');
 var bcFactory = require('./Breadcrumbs');
 

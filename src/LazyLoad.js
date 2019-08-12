@@ -1,5 +1,5 @@
 import React from 'react';
-import {devOnly, shallowCopyExcept} from './utils';
+import {devOnly, shallowCopyExcept} from 'i-js-utils';
 import {_buildElement} from './utils-internal';
 
 function _subElementProps(source) {

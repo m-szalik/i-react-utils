@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import {SimpleListTable, ListPagination} from './ListComponents';
-import {devOnly, shallowCopyExcept} from './utils';
+import {devOnly, shallowCopyExcept} from 'i-js-utils';
 import {_buildElement} from './utils-internal';
 
 

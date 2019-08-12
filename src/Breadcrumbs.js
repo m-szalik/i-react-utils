@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
-import {devOnly, isEquivalent, shallowCopyExcept} from './utils'
+import {devOnly, isEquivalent, shallowCopyExcept} from 'i-js-utils'
 
 
 export function bc(link, label) {
