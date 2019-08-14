@@ -21,20 +21,22 @@
     "test": "test"
   },
   "dependencies": {
+    "i-js-utils": "1.x.x",
     "react": "^15.x.x",
-    "react-router": "2.x.x || 3.x.x",
-    "i-js-utils": "1.x.x"
+    "react-router": "2.x.x || 3.x.x"
   },
   "devDependencies": {
+    "@babel/cli": "^7.5.x",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
     "assert": "*",
     "axios": "^0.19.0",
-    "babel-cli": "^6.1.18",
     "babel-jest": "^24.8.0",
     "babel-loader": "^7.1.x",
     "babel-plugin-add-module-exports": "*",
     "babel-plugin-react-transform": "*",
     "babel-polyfill": "^6.20.0",
-    "babel-preset-es2015": "*",
     "babel-preset-react": "*",
     "babel-preset-stage-0": "*",
     "codecov": "^3.0.0",
@@ -47,13 +49,13 @@
     "react-test-renderer": "^15.4.1",
     "rimraf": "^2.7.0",
     "transform-loader": "*",
-    "webpack": "^4.39.2",
+    "webpack": "*",
     "webpack-dev-server": "*"
   },
   "scripts": {
     "clean": "rimraf lib dist",
     "test": "jest --watchAll",
-    "build": "./node_modules/babel-cli/bin/babel.js --plugins add-module-exports --out-dir ./lib --no-comments --compact true --minified ./src/",
+    "build": "./node_modules/@babel/cli/bin/babel.js --plugins add-module-exports --out-dir ./lib --no-comments --compact true --minified ./src/",
     "prepublish": "npm run clean && npm run build",
     "start": "node ./example/server.js"
   },
@@ -63,7 +65,20 @@
   },
   "jest": {
     "verbose": true,
-    "setupTestFrameworkScriptFile": "./test-env-setup.js",
-    "collectCoverage": true
+    "setupFilesAfterEnv": ["./test-env-setup.js"],
+    "collectCoverage": true,
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    },
+    "globals": {
+      "NODE_ENV": "test"
+    },
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ]
   }
 }
