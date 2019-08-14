@@ -27,9 +27,9 @@
   },
   "devDependencies": {
     "assert": "*",
-    "axios": "^0.17.x",
+    "axios": "^0.19.0",
     "babel-cli": "^6.1.18",
-    "babel-jest": "^21.0.0",
+    "babel-jest": "^24.8.0",
     "babel-loader": "^7.1.x",
     "babel-plugin-add-module-exports": "*",
     "babel-plugin-react-transform": "*",
@@ -41,13 +41,13 @@
     "envify": "*",
     "es6-promise": "*",
     "expose-loader": "*",
-    "jest": "^21.0.0",
+    "jest": "^24.8.0",
     "react-addons-test-utils": "^15.x.x",
     "react-dom": "^15.x.x",
     "react-test-renderer": "^15.4.1",
-    "rimraf": "^2.4.3",
+    "rimraf": "^2.7.0",
     "transform-loader": "*",
-    "webpack": "*",
+    "webpack": "^4.39.2",
     "webpack-dev-server": "*"
   },
   "scripts": {
