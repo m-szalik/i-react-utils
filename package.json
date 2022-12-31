@@ -33,7 +33,7 @@
     "assert": "*",
     "axios": "^0.19.0",
     "babel-jest": "^24.8.0",
-    "babel-loader": "^7.1.x",
+    "babel-loader": "^9.1.x",
     "babel-plugin-add-module-exports": "*",
     "babel-plugin-react-transform": "*",
     "babel-polyfill": "^6.20.0",
